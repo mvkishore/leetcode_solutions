@@ -12,28 +12,31 @@
 public class Solution {
     public void ReorderList(ListNode head) {
         ListNode slow = head, fast = head;
-        Stack<ListNode> stack = new Stack<ListNode>();
         
         while(fast != null && fast.next != null){
             slow = slow.next;
             fast = fast.next.next;
         }
-        
-        while(slow != null){
-            var next = slow.next;
-            slow.next = null;
-            stack.Push(slow);
-            slow = next;
-        }
        
-        slow = head;
-   
-        while(stack.Count > 0 && slow != stack.Peek()){
-            var next = slow.next;
-            slow.next = stack.Pop();
-            if(slow.next != next)
-                slow.next.next = next;
-            slow = next;
+        ListNode prev = null, cur = slow; 
+        while(cur != null){
+            var next = cur.next; 
+            cur.next = prev; 
+            
+            prev = cur; 
+            cur = next; 
+        }
+        
+        ListNode left = head, right = prev;
+        while(left != null && right != null){
+            var next = left.next; 
+            left.next = right; 
+            left = next; 
+            
+            next = right.next;
+            if(right != left)
+                right.next = left;
+            right = next; 
         }
     }
 }
