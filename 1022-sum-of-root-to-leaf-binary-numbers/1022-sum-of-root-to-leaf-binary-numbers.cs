@@ -24,7 +24,7 @@ public class Solution {
         
         if(root.left == null && root.right == null)
         {
-            return sum+current;
+            return current;
         }
         var leftSum = SumRootToLeaf(root.left, current << 1, sum);
         var rightSum = SumRootToLeaf(root.right, current << 1, sum);
