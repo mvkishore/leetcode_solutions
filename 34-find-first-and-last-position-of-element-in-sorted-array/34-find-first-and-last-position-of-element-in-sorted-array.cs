@@ -19,7 +19,7 @@ public class Solution {
         
         res[0] = hi;
         
-        low = 0; hi = n - 1;
+        hi = n - 1;
         while(low < hi){
             int mid = hi - (hi - low) / 2;
             
