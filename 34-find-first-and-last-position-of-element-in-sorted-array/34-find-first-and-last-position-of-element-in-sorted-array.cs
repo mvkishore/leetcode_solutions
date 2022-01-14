@@ -14,10 +14,10 @@ public class Solution {
             else
                 low = mid + 1;
         }
-        if(nums[hi] != target)
+        if(nums[low] != target)
             return new int[]{-1 , -1};
         
-        res[0] = hi;
+        res[0] = low;
         
         hi = n - 1;
         while(low < hi){
