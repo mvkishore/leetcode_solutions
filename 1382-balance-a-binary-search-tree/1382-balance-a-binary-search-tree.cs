@@ -15,39 +15,31 @@ public class Solution {
     public TreeNode BalanceBST(TreeNode root) {
         if(root == null)
             return root;
-        List<TreeNode> nodes = new List<TreeNode>();
         
-        Stack<TreeNode> stack = new Stack<TreeNode>();
-        PushLeftTree(root, stack);
-        
-        while(stack.Count > 0){
-            var node = stack.Pop();
-            nodes.Add(node);
-            if(node.right != null)
-                PushLeftTree(node.right, stack);
-        }
-        
-        return ConstructBST(nodes, 0, nodes.Count -1);
+        List<int> nodes = new List<int>();
+        CollectNodes(root, nodes);
+        return ConstructBST(nodes, 0, nodes.Count - 1);
     }
     
-    private TreeNode ConstructBST(List<TreeNode> nodes, int start, int end)
+    private void CollectNodes(TreeNode root, List<int> nodes)
+    {
+        if(root == null)
+            return;
+        CollectNodes(root.left, nodes);
+        nodes.Add(root.val);
+        CollectNodes(root.right, nodes);
+    }
+    
+    private TreeNode ConstructBST(List<int> nodes, int start, int end)
     {
         if(start > end)
             return null;
-        
         int mid = start + (end - start) / 2;
-        var root = nodes[mid];
+        
+        TreeNode root = new TreeNode(nodes[mid]);
         root.left = ConstructBST(nodes, start, mid - 1);
         root.right = ConstructBST(nodes, mid + 1, end);
+        
         return root;
-    }
-    
-    private void PushLeftTree(TreeNode root, Stack<TreeNode> stack)
-    {
-        var trav = root;
-        while(trav != null){
-            stack.Push(trav);
-            trav = trav.left;
-        }
     }
 }
