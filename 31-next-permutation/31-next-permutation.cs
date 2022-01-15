@@ -2,11 +2,9 @@ public class Solution {
     public void NextPermutation(int[] nums) {
         int n = nums.Length;
         
-        int explorePos = n - 1;
-        while(explorePos > 0 && nums[explorePos - 1] >= nums[explorePos])
+        int explorePos = n - 2;
+        while(explorePos >= 0 && nums[explorePos + 1] <= nums[explorePos])
             explorePos--;
-        
-        explorePos--;
         
         if(explorePos >= 0){
             int nextPos = explorePos + 1;
