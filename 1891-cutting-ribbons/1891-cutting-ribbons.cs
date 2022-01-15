@@ -1,26 +1,28 @@
 public class Solution {
     public int MaxLength(int[] ribbons, int k) {
-        int n = ribbons.Length;
+        int low = 0, hi = (int) 1e5, n = ribbons.Length;
         
-        int low = 0, hi = (int) 1e5;
-     
-        while(low < hi){
+        while(low < hi)
+        {
             int mid = hi - (hi - low) / 2;
             
-            int r = TotalRibbons(mid, ribbons);
-            if(r >= k)
+            int count = GetRibbonCount(ribbons, mid);
+            
+            if(count >= k)
                 low = mid;
             else
                 hi = mid - 1;
         }
-        return low;
+        
+        return hi;
     }
     
-    public int TotalRibbons(int size, int[] ribbons)
+    private int GetRibbonCount(int[] ribbons, int length)
     {
         int count = 0;
         foreach(var ribbon in ribbons)
-            count += ribbon/size;
+            count += ribbon / length;
+        
         return count;
     }
 }
