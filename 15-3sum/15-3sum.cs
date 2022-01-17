@@ -1,15 +1,3 @@
-/*
-
-sort = N LOGN
-
-x + y + z = 0
-
-
-
-x + y = -z ==> O(N)
-
-*/
-
 public class Solution {
     public IList<IList<int>> ThreeSum(int[] nums) {
         int n = nums.Length;
@@ -38,9 +26,8 @@ public class Solution {
             int sum = target + nums[l] + nums[r];
             
             if(sum == 0){
-                var triple = new List<int>(){ target, nums[l], nums[r]};
+                var triple = new List<int>(){ target, nums[l++], nums[r--]};
                 result.Add(triple);
-                l++;r--;
                 
                 //Skip duplicate number
                 while(l < r && nums[l] == nums[l-1])
