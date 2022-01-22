@@ -13,8 +13,8 @@ public class Solution {
             return dp[n];
         if(n == 1)
             return dp[n] = true;
-        int sqr = (int) Math.Sqrt(n);
-        for(int i=1; i <= sqr; i++){
+        
+        for(int i=1; i*i <= n; i++){
             if(!CanWin(n - i*i, dp).Value)
                 return dp[n] = true;
         }
