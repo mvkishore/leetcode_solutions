@@ -12,22 +12,22 @@
  * }
  */
 public class Solution {
-    int kthsmall = -1;
-    int count = 0;
     public int KthSmallest(TreeNode root, int k) {
-        Inorder(root, k);
-        return kthsmall;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        while(stack.Count > 0 || root != null){
+            PushLeftTree(root, stack);
+            
+            root = stack.Pop();
+            if(--k == 0) return root.val;
+            root = root.right;
+        }
+        return -1;
     }
-    
-    private void Inorder(TreeNode root, int k)
-    {
-        if(root == null)
-            return;
-        
-        Inorder(root.left, k);
-        count++;
-        if(count == k)
-            kthsmall = root.val;
-        Inorder(root.right, k);
+    private void PushLeftTree(TreeNode root, Stack<TreeNode> stack){
+        while(root != null)
+        {
+            stack.Push(root);
+            root = root.left;
+        }
     }
 }
