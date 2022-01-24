@@ -22,7 +22,6 @@ public class Solution {
             else if(!char.IsLower(word[i]))
                 return false;    
         }
-        Console.WriteLine(true);
         return true;
     }
     
