@@ -1,15 +1,15 @@
 public class LFUCache {
     Dictionary<int, LinkedListNode<(int key, int val)>> cacheValues;
     Dictionary<int, int> cacheFrequency;
-    Dictionary<int, LinkedList<(int key, int val)>> cacheLinkedLists;
-    int minFrequency = 1;
+    Dictionary<int, LinkedList<(int key, int val)>> cacheLists;
     int size;
+    int minFrequency = 1;
 
     public LFUCache(int capacity) {
-        cacheValues = new Dictionary<int, LinkedListNode<(int key, int val)>>();
+        cacheValues = new Dictionary<int, LinkedListNode<(int, int)>>();
         cacheFrequency = new Dictionary<int, int>();
-        cacheLinkedLists = new Dictionary<int, LinkedList<(int key, int val)>>();
-        cacheLinkedLists.Add(1, new LinkedList<(int, int)>());
+        cacheLists = new Dictionary<int, LinkedList<(int, int)>>();
+        cacheLists.Add(1, new LinkedList<(int, int)>());
         size = capacity;
     }
     
@@ -19,22 +19,22 @@ public class LFUCache {
         
         var node = cacheValues[key];
         var freq = cacheFrequency[key];
-        var list = cacheLinkedLists[freq];
+        var list = cacheLists[freq];
         
         list.Remove(node);
         cacheFrequency.Remove(key);
-        cacheFrequency.Add(key, freq + 1);
+        cacheValues.Remove(key);
+        if(!cacheLists.ContainsKey(freq + 1))
+            cacheLists.Add(freq + 1, new LinkedList<(int, int)>());
         
         if(freq == minFrequency && list.Count == 0)
             minFrequency++;
         
-        if(!cacheLinkedLists.ContainsKey(freq + 1))
-            cacheLinkedLists[freq + 1] = new LinkedList<(int key, int val)>();
-        
-        list = cacheLinkedLists[freq+1];
-        var updateNode = new LinkedListNode<(int, int)>((node.Value.key, node.Value.val));
-        list.AddFirst(updateNode);
-        cacheValues[key] = updateNode;
+        list = cacheLists[freq + 1];
+        node = new LinkedListNode<(int,int)>((node.Value.key, node.Value.val));
+        list.AddFirst(node);
+        cacheValues.Add(key, node);
+        cacheFrequency.Add(key, freq + 1);
         
         return node.Value.val;
     }
@@ -44,18 +44,19 @@ public class LFUCache {
             return;
         
         var newNode = new LinkedListNode<(int, int)>((key, value));
-        if(cacheValues.ContainsKey(key))
-        {
+        if(cacheValues.ContainsKey(key)){
             Get(key);
-            var list = cacheLinkedLists[cacheFrequency[key]];
-            var node = cacheValues[key];
-            list.Remove(node);
+            var freq = cacheFrequency[key];
+            var list = cacheLists[freq];
+            var oldNode = cacheValues[key];
             
+            list.Remove(oldNode);
             list.AddFirst(newNode);
-            cacheValues[key] = newNode;
-        }else{
+            cacheValues.Remove(key);
+            cacheValues.Add(key, newNode);
+        } else {
             if(cacheValues.Count == size){
-                var lfList = cacheLinkedLists[minFrequency];
+                var lfList = cacheLists[minFrequency];
                 var last = lfList.Last;
                 
                 lfList.RemoveLast();
@@ -63,11 +64,11 @@ public class LFUCache {
                 cacheFrequency.Remove(last.Value.key);
             }
             
-            var list = cacheLinkedLists[1];
-            list.AddFirst(newNode);
-            cacheValues[key] = newNode;
-            cacheFrequency[key] = 1;
+            var list = cacheLists[1];
             minFrequency = 1;
+            list.AddFirst(newNode);
+            cacheValues.Add(key, newNode);
+            cacheFrequency.Add(key, 1);
         }
     }
 }
