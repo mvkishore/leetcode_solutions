@@ -37,18 +37,14 @@ public class Solution {
     public IList<int> SequentialDigits(int low, int high) {
         int lowLen = low.ToString().Length, highLen = high.ToString().Length;
         IList<int> res = new List<int>();
-        if(lowLen == highLen){
-            GetSequentialDigits(low, lowLen, high, res);
-        }else{
-            GetSequentialDigits(low, lowLen, int.MaxValue, res);
-            for(int i=lowLen+1; i< highLen; i++)
-                GetSequentialDigits(int.MinValue, i, int.MaxValue, res);
-            GetSequentialDigits(int.MinValue, highLen, high, res);
-        }
+       
+        for(int i=lowLen; i<= highLen; i++)
+            GenerateSequentialDigits(low, i, high, res);
+        
         return res;
     }
     
-    private void GetSequentialDigits(int low, int len, int high, IList<int> res)
+    private void GenerateSequentialDigits(int low, int len, int high, IList<int> res)
     {
         var digits = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
         int i=0;
@@ -61,7 +57,7 @@ public class Solution {
             }
             if(num >= low && num <= high)
                 res.Add(num);
-            i++;//1
+            i++;
         }
     }
     
