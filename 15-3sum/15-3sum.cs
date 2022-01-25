@@ -1,40 +1,37 @@
 public class Solution {
     public IList<IList<int>> ThreeSum(int[] nums) {
         int n = nums.Length;
-        IList<IList<int>> result = new List<IList<int>>();
-        
         if(n < 3)
-            return result;
+            return new List<IList<int>>();
         
         Array.Sort(nums);
+        IList<IList<int>> res = new List<IList<int>>();
         
         for(int i=0; i<n; i++){
-            TwoSum(nums, i + 1, nums[i], result);
-            
-            //Skip duplicate number
+            int a = nums[i];
+            TwoSum(nums, a, res, i+1);
             while(i+1 < n && nums[i+1] == nums[i])
                 i++;
         }
-        return result;
+        return res;
     }
     
-    
-    public void TwoSum(int[] nums, int start, int target, IList<IList<int>> result)
+    private void TwoSum(int[] nums, int a, IList<IList<int>> res, int start)
     {
-        int l = start, r = nums.Length-1;
+        int l=start, n = nums.Length, r = n - 1;
         while(l < r){
-            int sum = target + nums[l] + nums[r];
-            
-            if(sum == 0){
-                var triple = new List<int>(){ target, nums[l++], nums[r--]};
-                result.Add(triple);
-                
-                //Skip duplicate number
-                while(l < r && nums[l] == nums[l-1])
+            int b = nums[l], c = nums[r];
+            int sum = a + b + c;
+            if( sum == 0){
+                res.Add(new List<int>(){ a, b, c});
+                while(l+1 < n && nums[l+1] == nums[l])
                     l++;
+                l++; r--;
+            }else if(sum < 0){
+                 l++;
+            }else {
+                 r--;
             }
-            else if(sum < 0) l++;
-            else r--;
         }
     }
 }
