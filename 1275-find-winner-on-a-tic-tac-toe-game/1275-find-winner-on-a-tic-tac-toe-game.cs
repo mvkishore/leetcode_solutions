@@ -1,42 +1,27 @@
 public class Solution {
+    int n = 3;
     public string Tictactoe(int[][] moves) {
-        int totalMoves = moves.Length;
-        char[,] board = new char[3,3];
+        int[] rows = new int[n], cols = new int[n];
+        int dia = 0, antiDia = 0;
         
+        int player = 1;
         for(int i=0; i<moves.Length; i++){
-            board[moves[i][0], moves[i][1]] = (i % 2 == 0) ? 'X' : 'O';
+            int row = moves[i][0];
+            int col = moves[i][1];
+            
+            rows[row] += player;
+            cols[col] += player;
+            if(row == col)
+                dia += player;
+            if(row + col == n -1)
+                antiDia += player;
+            
+            if(Math.Abs(rows[row]) == n || Math.Abs(cols[col]) == n ||
+               Math.Abs(dia) == n || Math.Abs(antiDia) == n)
+                return player == 1 ? "A" : "B";
+            player = -player;
         }
         
-        if(CheckWinner(board, 'X'))
-            return "A";
-        if(CheckWinner(board, 'O'))
-            return "B";
-        
-        if(moves.Length == 9)
-            return "Draw";
-        
-        return "Pending";
-    }
-    
-    private bool CheckWinner(char[,] board, char mark)
-    {
-        int diaCount = 0;
-        int revDiaCount = 0;
-        for(int i=0; i<3; i++){
-            int rowCount = 0, colCount = 0;
-            for(int j=0; j<3; j++){
-                if(board[i,j] == mark)
-                    rowCount++;
-                if(board[j,i] == mark)
-                    colCount++;
-                if(i==j && board[i,j] == mark)
-                    diaCount++;
-                if(i == 2 - j && board[i, j] == mark)
-                    revDiaCount++;
-            }
-            if(rowCount == 3 || colCount == 3)
-                return true;
-        }
-        return diaCount == 3 || revDiaCount == 3;
+        return moves.Length == n*n ? "Draw" : "Pending";
     }
 }
