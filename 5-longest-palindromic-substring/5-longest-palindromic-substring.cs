@@ -12,7 +12,6 @@ public class Solution {
                 startIndex = i - (len - 1) / 2;
             }
         }
-        Console.WriteLine(startIndex);
         return s.Substring(startIndex, maxLen);
     }
     
