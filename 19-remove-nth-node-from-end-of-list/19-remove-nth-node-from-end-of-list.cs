@@ -17,8 +17,7 @@ public class Solution {
             n--;
         }
         
-        if(n > 0) return null;
-        
+        //if(n > 0) return null;
         ListNode second = head, prev = null;
         while(first != null){
             prev = second;
