@@ -2,7 +2,7 @@ public class Solution {
     public int OrangesRotting(int[][] grid) {
         int rows = grid.Length, cols = grid[0].Length;
         Queue<int[]> queue = new Queue<int[]>();
-        bool[,] visited = new bool[rows, cols];
+        
         int countFreshOranges = 0;
         for(int row=0; row < rows; row++){
             for(int col=0; col < cols; col++){
@@ -20,12 +20,8 @@ public class Solution {
             int size = queue.Count;
             for(int i=0; i<size; i++){
                 var cur = queue.Dequeue();
-                if(visited[cur[0], cur[1]]) continue;
-                
-                visited[cur[0], cur[1]] = true;
-                
                 foreach(var nei in GetValidNeighbors(grid, cur[0], cur[1])){
-                    if(!visited[nei[0], nei[1]] && grid[nei[0]][nei[1]] == 1){
+                    if(grid[nei[0]][nei[1]] == 1){
                         queue.Enqueue(nei);
                         grid[nei[0]][nei[1]] = 2;
                         countFreshOranges--;
