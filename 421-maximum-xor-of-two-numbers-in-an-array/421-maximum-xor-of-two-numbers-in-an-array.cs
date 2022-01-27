@@ -1,7 +1,8 @@
 public class Solution {
     public int FindMaximumXOR(int[] nums) {
         int max = 0, mask= 0;
-        for(int i=31; i>=0; i--){
+        int L = Convert.ToString(nums.Max(), 2).Length;
+        for(int i = L-1; i>=0; i--){
             mask = mask | (1 << i);
             
             HashSet<int> prefixes = new HashSet<int>();
