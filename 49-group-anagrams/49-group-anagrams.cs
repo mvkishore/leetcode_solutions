@@ -10,12 +10,7 @@ public class Solution {
             store[key].Add(str);
         }
         
-        IList<IList<string>> res = new List<IList<string>>();
-        
-        foreach(var rec in store){
-            res.Add(rec.Value);
-        }
-        return res;
+        return store.Values.ToList();
     }
     
     private string GetKey(string str)
