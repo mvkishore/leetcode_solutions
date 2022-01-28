@@ -22,8 +22,6 @@ public class WordDictionary {
     }
     private bool Search(string word, int start, TrieNode trav)
     {
-        if(start == word.Length && trav.IsWord)
-            return true;
         for(int i=start; i < word.Length; i++){
             if(word[i] == '.'){
                 foreach(var child in trav.Children){
