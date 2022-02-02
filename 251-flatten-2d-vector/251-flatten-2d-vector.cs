@@ -1,24 +1,25 @@
 public class Vector2D {
-    List<int> vector;
-    int cur = 0;
+    int[][] vector;
+    int row, col;
+    int rows, cols;
     public Vector2D(int[][] vec) {
-        vector = new List<int>();
-        foreach(var v in vec){
-            foreach(var ele in v)
-                vector.Add(ele);
-        }
+        vector = vec;
+        rows = vec.Length;
     }
     
     public int Next() {
         if(HasNext()){
-            var val = vector[cur++];
-            return val;
+            return vector[row][col++];
         }
         return -1;
     }
     
     public bool HasNext() {
-        return cur < vector.Count;
+        while(row < rows && col == vector[row].Length){
+            row++;
+            col = 0;
+        }
+        return row < rows;
     }
 }
 
