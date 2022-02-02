@@ -2,15 +2,13 @@ public class Solution {
     public IList<int> FindAnagrams(string s, string p) {
         int l=0, r=0, n = s.Length;
         int[] counter = new int[26];
+        
         foreach(var c in p)
             counter[c - 'a']++;
         
         int count = 0, m = p.Length;
         IList<int> res = new List<int>();
-        //Console.WriteLine($"{m} -- {n}");
-        if(m > n)
-            return res;
-        
+       
         while(r < n){
             if(counter[s[r++] - 'a']-- > 0)
                 count++;
