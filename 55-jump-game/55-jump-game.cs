@@ -15,15 +15,3 @@ public class Solution {
         return dp[0];
     }
 }
-
-// [2,3,1,1,4]
-// 1 - 3 - 4 
-//     -2 - 1-4
-// 2
-    
-// [4] = true
-// [1, ]
-    
-//  dp(i) = nums[i] > 0 && dp[i+x] for x = 1 to nums[i]
-//  dp(0)
-// dp(n-1) = true;
