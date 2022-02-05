@@ -24,10 +24,10 @@ public class Solution {
             for(int j=0; j< Math.Min(word1.Length, word2.Length); j++)
             {
                 if(word1[j] != word2[j]){
-                    //if(!orderGraph[word1[j]].Contains(word2[j])){
+                    if(!orderGraph[word1[j]].Contains(word2[j])){
                         orderGraph[word1[j]].Add(word2[j]);
                         indegrees[word2[j]]++;
-                    //}
+                    }
                     break;
                 }
             }
