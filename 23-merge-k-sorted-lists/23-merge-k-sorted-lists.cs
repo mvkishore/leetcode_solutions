@@ -22,14 +22,15 @@ public class Solution {
         
         while(heap.Count > 0){
             var min = heap.Min;
-            var node = min.node;
-            var next = node.next;
-            trav.next = node;
-            
-            if(next != null)
-                heap.Add((next.val, k++, next));
             heap.Remove(min);
             
+            var node = min.node;
+            var next = node.next;
+            
+            trav.next = node;
+            if(next != null)
+                heap.Add((next.val, k++, next));
+           
             trav = trav.next;
         }
         
