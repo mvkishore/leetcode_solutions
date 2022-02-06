@@ -1,9 +1,3 @@
-/* 
-3 4 5 2 1 6 9 2 4 1 10
-
-1 1 2 2 3 4 |  4 5 6 9 10
-*/
-
 public class MedianFinder {
     private SortedSet<(int val, long indx)> leftPart;
     private SortedSet<(int val, long indx)> rightPart;
