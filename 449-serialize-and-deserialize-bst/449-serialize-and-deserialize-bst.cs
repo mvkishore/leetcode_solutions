@@ -12,21 +12,21 @@ public class Codec {
     // Encodes a tree to a single string.
     public string serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
-        PostOrder(root, sb);
+        PreOrder(root, sb);
         if(sb.Length > 0)
             sb.Length--;
         return sb.ToString();
     }
     
-    private void PostOrder(TreeNode root, StringBuilder sb){
+    private void PreOrder(TreeNode root, StringBuilder sb){
         if(root == null)
             return;
         
-        PostOrder(root.left, sb);
-        PostOrder(root.right, sb);
-        
         sb.Append(root.val);
         sb.Append(' ');
+        
+        PreOrder(root.left, sb);
+        PreOrder(root.right, sb);
         return;
     }
     
@@ -34,14 +34,14 @@ public class Codec {
         if(values.Count == 0)
             return null;
 
-        var val = Convert.ToInt32(values[values.Count -1]);
+        var val = Convert.ToInt32(values[0]);
         if(val < min || val > max)
             return null;
         
-        values.RemoveAt(values.Count -1);
+        values.RemoveAt(0);
         var root = new TreeNode(val);
-        root.right = BuildBST(values, val, max);
         root.left = BuildBST(values, min, val);
+        root.right = BuildBST(values, val, max);
 
         return root;
     }
