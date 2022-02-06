@@ -30,18 +30,21 @@ public class MedianFinder {
         if(leftLen != rightLen){
             var diff = Math.Abs(leftLen - rightLen);
             if(diff == 1 && rightLen > leftLen) {
-                var min = PopMinOrMax(rightPart, true);
+                var min = Pop(rightPart, MinOrMax.MIN);
                 leftPart.Add(min);
             } else if(diff == 2) {
-                var max = PopMinOrMax(leftPart, false);
+                var max = Pop(leftPart, MinOrMax.MAX);
                 rightPart.Add(max);
             }
         }
     }
-    
-    private (int, long) PopMinOrMax(SortedSet<(int, long)> heap, bool isMin)
+    public enum MinOrMax {
+        MIN,
+        MAX
+    }
+    private (int, long) Pop(SortedSet<(int, long)> heap, MinOrMax minOrmax)
     {
-        var minOrMax = isMin ? heap.Min : heap.Max;
+        var minOrMax = MinOrMax.MIN == minOrmax ? heap.Min : heap.Max;
         heap.Remove(minOrMax);
         return minOrMax;
     }
