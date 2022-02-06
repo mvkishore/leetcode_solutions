@@ -8,7 +8,7 @@ public class Solution {
             maxCount = Math.Max(maxCount, count[s[r] - 'A']);
             r++;
             
-            if((r - l) - maxCount > k){
+            if(r - l - maxCount > k){
                 count[s[l] - 'A']--;
                 l++;
             }
