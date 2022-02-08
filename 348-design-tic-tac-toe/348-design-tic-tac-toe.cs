@@ -1,48 +1,32 @@
 public class TicTacToe {
-    int [,] board;
+    int[] rows;
+    int[] cols;
+    int dia, antiDia;
     int n;
     public TicTacToe(int n) {
-        board = new int[n,n];
+        rows = new int[n];
+        cols = new int[n];
         this.n = n;
     }
     
     public int Move(int row, int col, int player) {
-        board[row, col] = player;
+        int val = player == 1 ? 1 : -1;
+        rows[row] += val;
+        cols[col] += val;
         
-        if(CheckRow(row, player) || CheckColumn(col, player)
-          || (row == col && CheckDiagonal(player))
-          || (row == n - col - 1 && CheckAntiDiagonal(player)))
+        if(row == col)
+            dia += val;
+        
+        if(row == n - col - 1)
+            antiDia += val;
+        
+        if(Math.Abs(rows[row]) == n ||
+           Math.Abs(cols[col]) == n ||
+           Math.Abs(dia) == n ||
+           Math.Abs(antiDia) == n)
             return player;
         
         return 0;
-    }
-    
-    private bool CheckRow(int row, int player){
-        for(int i=0; i < n; i++)
-            if(board[row, i] != player)
-                return false;
-        return true;
-    }
-    
-    private bool CheckColumn(int col, int player){
-        for(int i=0; i < n; i++)
-            if(board[i, col] != player)
-                return false;
-        return true;
-    }
-    
-    private bool CheckDiagonal(int player){
-        for(int i=0; i<n; i++)
-            if(board[i, i] != player)
-                return false;
-        return true;
-    }
-    
-    private bool CheckAntiDiagonal(int player){
-        for(int i=0; i<n; i++)
-            if(board[i, n - i -1] != player)
-                return false;
-        return true;
     }
 }
 
