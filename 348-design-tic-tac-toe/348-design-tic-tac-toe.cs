@@ -1,34 +1,48 @@
 public class TicTacToe {
-    char [,] board;
+    int [,] board;
+    int n;
     public TicTacToe(int n) {
-        board = new char[n,n];
+        board = new int[n,n];
+        this.n = n;
     }
     
     public int Move(int row, int col, int player) {
-        board[row, col] = player == 1 ? 'X' : 'O';
-        return Check(player);
-    }
-    
-    private int Check(int player) {
-        char c = player == 1 ? 'X' : 'O'; 
-        int n = board.GetLength(0);
-        int diaCount = 0, aDiaCount = 0;
-
-        for(int i=0; i < n; i++){
-            int rowCount =0, colCount = 0;
-            for(int j=0; j< n; j++){
-                rowCount += (board[i,j] == c ? 1 : 0);
-                colCount += (board[j,i] == c ? 1 : 0);
-                if(i == j)
-                    diaCount += (board[i,j] == c ? 1 : 0);
-                if(i + j == n - 1)
-                    aDiaCount += (board[i,j] == c ? 1 : 0);
-            }
-            if(rowCount == n || colCount == n || diaCount == n || aDiaCount == n)
-                return player;
-        }
+        board[row, col] = player;
+        
+        if(CheckRow(row, player) || CheckColumn(col, player)
+          || (row == col && CheckDiagonal(player))
+          || (row == n - col - 1 && CheckAntiDiagonal(player)))
+            return player;
         
         return 0;
+    }
+    
+    private bool CheckRow(int row, int player){
+        for(int i=0; i < n; i++)
+            if(board[row, i] != player)
+                return false;
+        return true;
+    }
+    
+    private bool CheckColumn(int col, int player){
+        for(int i=0; i < n; i++)
+            if(board[i, col] != player)
+                return false;
+        return true;
+    }
+    
+    private bool CheckDiagonal(int player){
+        for(int i=0; i<n; i++)
+            if(board[i, i] != player)
+                return false;
+        return true;
+    }
+    
+    private bool CheckAntiDiagonal(int player){
+        for(int i=0; i<n; i++)
+            if(board[i, n - i -1] != player)
+                return false;
+        return true;
     }
 }
 
