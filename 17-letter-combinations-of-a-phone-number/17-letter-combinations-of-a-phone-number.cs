@@ -5,7 +5,6 @@ public class Solution {
         if(string.IsNullOrEmpty(digits))
             return result;
         
-        IList<StringBuilder> cur = new List<StringBuilder>();
         Dictionary<char, List<char>> digitMap = new Dictionary<char, List<char>>(){
             {'2', new List<char>{'a', 'b','c'}},
             {'3', new List<char>{'d', 'e','f'}},
@@ -16,29 +15,24 @@ public class Solution {
             {'8', new List<char>{'t', 'u','v', }},
             {'9', new List<char>{'w', 'x','y', 'z'}}
         };
-        cur.Add(new StringBuilder());
-        Generate(digits, 0, result, cur, digitMap);
+        Generate(digits, 0, result, new StringBuilder(), digitMap);
         return result;
     }
     
-    private void Generate(string digits, int start, List<string> result, IList<StringBuilder> cur, Dictionary<char, List<char>> digitMap)
+    private void Generate(string digits, int start, List<string> result, StringBuilder cur, Dictionary<char, List<char>> digitMap)
     {
         if(start == digits.Length){
-            result.AddRange(cur.Select(x=>x.ToString()));
+            result.Add(cur.ToString());
             return;
         }
         
         var digit = digits[start];
-        var list = new List<StringBuilder>();
         
         foreach(var c in digitMap[digit]){
-            for(int i=0; i<cur.Count; i++){
-                var sb = new StringBuilder(cur[i].ToString());
-                sb.Append(c);
-                list.Add(sb);
-            }
+            cur.Append(c);
+            Generate(digits, start + 1, result, cur, digitMap);
+            cur.Length--;
         }
-        Generate(digits, start + 1, result, list, digitMap);
     }
 }
 
