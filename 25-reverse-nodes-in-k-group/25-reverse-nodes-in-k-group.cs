@@ -11,38 +11,38 @@
  */
 public class Solution {
     public ListNode ReverseKGroup(ListNode head, int k) {
-        ListNode cur = head, res = null, revTail = null;
+        ListNode cur = head, res_head = null, prevRevTail = null;
         
         while(cur != null){
             int count = 0;
-            
             while(cur != null && count < k){
                 cur = cur.next;
                 count++;
             }
             
             if(count == k){
-                var revHead = RevereseKNodes(head, k);
+                var revHead = RevereseKList(head, k);
                 
-                if(res == null)
-                    res = revHead;
-                               
-                if(revTail != null)
-                    revTail.next = revHead;
+                if(res_head == null)
+                    res_head = revHead;
                 
-                revTail = head;
+                if(prevRevTail != null)
+                    prevRevTail.next = revHead;
+                
+                prevRevTail = head;
                 head = cur;
             }
         }
-        if(revTail != null)
-            revTail.next = head;
         
-        return res ?? head;
+        if(prevRevTail != null)
+            prevRevTail.next = head;
+        
+        return res_head ?? head;
     }
-    
-    public ListNode RevereseKNodes(ListNode head, int k){
+    private ListNode RevereseKList(ListNode head, int k)
+    {
         ListNode cur = head, prev = null;
-        while(cur != null && k > 0){
+        while(k > 0){
             var next = cur.next;
             cur.next = prev;
             prev = cur;
