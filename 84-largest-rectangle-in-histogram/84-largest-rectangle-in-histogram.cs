@@ -1,29 +1,24 @@
 public class Solution {
     public int LargestRectangleArea(int[] heights) {
         int n = heights.Length, maxArea = 0;
-        if(n < 3)
-            return Math.Max(heights.Max(), heights.Min() * n);
         Stack<int> seenHeights = new Stack<int>();
         
         seenHeights.Push(-1);
-        
-        for(int i=0; i<n; i++)
-        {
-            int curHeight = heights[i];
+        for(int i=0; i<n; i++){
             
-            while(seenHeights.Peek() != -1 && heights[seenHeights.Peek()] >= curHeight){
-                var h = heights[seenHeights.Pop()];
-                int r = i -1, l = seenHeights.Peek();
-                maxArea = Math.Max(maxArea, h * (r - l));
+            while(seenHeights.Peek() != -1 && heights[seenHeights.Peek()] >= heights[i]){
+                int h = heights[seenHeights.Pop()];
+                int r = i - 1, l = seenHeights.Peek();
+                maxArea = Math.Max(maxArea, (r - l) * h);
             }
             
             seenHeights.Push(i);
         }
         
         while(seenHeights.Peek() != -1){
-            var h = heights[seenHeights.Pop()];
+            int h = heights[seenHeights.Pop()];
             int r = n - 1, l = seenHeights.Peek();
-            maxArea = Math.Max(maxArea, h * (r - l));
+            maxArea = Math.Max(maxArea, (r - l) * h);
         }
         
         return maxArea;
