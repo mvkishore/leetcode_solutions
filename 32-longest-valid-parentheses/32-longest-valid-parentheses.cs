@@ -9,7 +9,7 @@ public class Solution {
             
             if(left == right)
                 maxLen = Math.Max(maxLen,2 * right);
-            else if(right >= left)
+            else if(right > left)
                 left = right = 0;
         }
         left = right = 0;
@@ -22,7 +22,7 @@ public class Solution {
             
             if(left == right)
                 maxLen = Math.Max(maxLen,2 * left);
-            else if(left >= right)
+            else if(left > right)
                 left = right = 0;
         }
         return maxLen;
