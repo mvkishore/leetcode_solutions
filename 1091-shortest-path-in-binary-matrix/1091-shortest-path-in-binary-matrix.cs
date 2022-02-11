@@ -1,14 +1,13 @@
 public class Solution {
     public int ShortestPathBinaryMatrix(int[][] grid) {
         int n = grid.Length;
-        bool[,] visited = new bool[n, n];
         
         if(grid[0][0] != 0)
             return -1;
         
         Queue<int[]> queue = new Queue<int[]>();
         queue.Enqueue(new int[]{0, 0});
-        visited[0,0] = true;
+        grid[0][0] = 1;
         
         int len = 1;
         while(queue.Count > 0)
@@ -22,11 +21,11 @@ public class Solution {
                 
                 foreach(var nei in GetNieghbors(cur[0], cur[1], n)){
                     int nextRow = nei[0], nextCol = nei[1];
-                    if(!visited[nextRow, nextCol] && grid[nextRow][nextCol] == 0){
+                    if(grid[nextRow][nextCol] == 0){
                         if(nextRow == n -1 && nextCol == n - 1)
                             return len + 1;
                         
-                        visited[nextRow, nextCol] = true;
+                        grid[nextRow][nextCol] = 1;
                         queue.Enqueue(nei);
                     }
                 }
