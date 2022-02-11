@@ -1,41 +1,40 @@
 public class Solution {
     public bool CheckInclusion(string s1, string s2) {
-        int l=0, r = 0, m = s1.Length, n = s2.Length;
-        int[] counter = new int[26];
-        int count = m;
+        int m = s1.Length, n = s2.Length, l = 0, r = 0, count = 0;
+        int[] s1Map = new int[26];
+        
         if(n < m)
             return false;
         
         foreach(var c in s1)
-            counter[c - 'a']++;
+            s1Map[c - 'a']++;
         
-        while(r < m){
+        while(r < m)
+        {
             int cur = s2[r] - 'a';
-            if(counter[cur] > 0){
-                count--;
-            }
-            counter[cur]--;
+            if(s1Map[cur] > 0)
+                count++;
+            s1Map[cur]--;
             r++;
         }
         
         while(r < n){
-            if(count == 0)
+            if(count == m)
                 return true;
             
-            int first = s2[l] - 'a';
-            if(counter[first] >=0)
-                count++;
-            counter[first]++;
+            int left = s2[l] - 'a';
+            if(s1Map[left] >= 0)
+                count--;
+            s1Map[left]++;
             l++;
             
             int cur = s2[r] - 'a';
-            if(counter[cur] > 0){
-                count--;
-            }
-            counter[cur]--;
+            if(s1Map[cur] > 0)
+                count++;
+            s1Map[cur]--;
             r++;
         }
         
-        return count == 0;
+        return count == m;
     }
 }
