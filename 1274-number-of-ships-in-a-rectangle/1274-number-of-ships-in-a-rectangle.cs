@@ -20,7 +20,7 @@ class Solution {
         if(topRight[0] == bottomLeft[0] && topRight[1] == bottomLeft[1])
             return 1;
         
-        int midX = (topRight[0] + bottomLeft[0] + 1) / 2;
+        int midX = (topRight[0] + bottomLeft[0] + 1) / 2;// done +1 to make sure we always consider cieling when the sum becomes odd
         int midY = (topRight[1] + bottomLeft[1] + 1) / 2;
         
         int rec1 = CountShips(sea, topRight, new int[]{midX, midY});
