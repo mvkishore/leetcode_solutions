@@ -12,22 +12,22 @@
  * }
  */
 public class Solution {
-    int max = int.MinValue;
+    int maxPath = int.MinValue;
     public int MaxPathSum(TreeNode root) {
-        MaxPathSumHelp(root);
-        return max;
+        CalcMaxPathSum(root);
+        return maxPath;
     }
-    
-    private int MaxPathSumHelp(TreeNode root){
+    public int CalcMaxPathSum(TreeNode root)
+    {
         if(root == null)
-            return 0; 
+            return int.MinValue;
         
-        int left_max = Math.Max(MaxPathSumHelp(root.left), 0);
-        int right_max = Math.Max(MaxPathSumHelp(root.right), 0);
+        int leftSum = Math.Max(CalcMaxPathSum(root.left), 0);
+        int rightSum = Math.Max(CalcMaxPathSum(root.right), 0);
         
-        int cur_max = root.val + left_max + right_max;
-        max = Math.Max(max, cur_max);
+        var curSum = root.val + leftSum + rightSum;
+        maxPath = Math.Max(curSum, maxPath);
         
-        return root.val + Math.Max(left_max, right_max);
+        return root.val + Math.Max(leftSum, rightSum);
     }
 }
