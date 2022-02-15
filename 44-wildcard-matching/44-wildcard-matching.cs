@@ -1,32 +1,29 @@
 public class Solution {
     public bool IsMatch(string s, string p) {
-        int s_i = 0, p_i = 0, m = s.Length, n = p.Length;
-        int p_star_i = -1, s_prev_i = -1;
+        int sI = 0, pI = 0, m = s.Length, n = p.Length;
+        int starIndx = -1, prevSi=-1;
         
-        while(s_i < m){
-            if(p_i < n && (s[s_i] == p[p_i] || p[p_i] == '?'))
+        while(sI < m){
+            if(pI < n && (s[sI] == p[pI] || p[pI] == '?'))
             {
-                s_i++;
-                p_i++;
-            }else if(p_i < n && p[p_i] == '*'){
-                p_star_i = p_i;
-                s_prev_i = s_i;
-                p_i++;
-            }else if(s_prev_i == -1)
-                return false;
-            else{
-                p_i = p_star_i + 1;
-                s_i = s_prev_i + 1;
-                s_prev_i = s_i;
+                sI++;
+                pI++;
+            }else if(pI < n && p[pI] == '*'){
+                starIndx = pI;
+                prevSi = sI;
+                pI++;
+            }else if(starIndx == -1) return false;
+            else {
+                pI = starIndx + 1;
+                sI = prevSi + 1;
+                prevSi = sI;
             }
         }
         
-        while(p_i < n){
-            if(p[p_i] != '*')
+        while(pI < n){
+            if(p[pI++] != '*')
                 return false;
-            p_i++;
         }
-        
         return true;
     }
 }
