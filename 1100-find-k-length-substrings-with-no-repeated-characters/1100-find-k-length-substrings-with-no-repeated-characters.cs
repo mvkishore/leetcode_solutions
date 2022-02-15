@@ -6,31 +6,32 @@ public class Solution {
         
         int[] count = new int[26];
         
-        int ans = 0, counter = 0;
+        int ans = 0, distinctCount = 0;
         while(r < k){
             if(count[s[r]-'a'] == 0)
-                counter++;
+                distinctCount++;
             
             count[s[r] - 'a']++;
             r++;
         }
         
         while(r < n){
-            if(counter == k)
+            if(distinctCount == k)
                 ans++;
             
             count[s[l] - 'a']--;
             if(count[s[l]-'a'] == 0)
-                counter--;
+                distinctCount--;
             l++;
             
             if(count[s[r]-'a'] == 0)
-                counter++;
+                distinctCount++;
             
             count[s[r] - 'a']++;
             r++;
         }
-        if(counter == k) ans++;
+        
+        if(distinctCount == k) ans++;
         return ans;
     }
 }
