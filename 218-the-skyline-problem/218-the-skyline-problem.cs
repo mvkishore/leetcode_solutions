@@ -1,44 +1,59 @@
 public class Solution {
-    public class Point {
-        public int x;
-        public int y;
+    public class Point : IComparable<Point> {
+        public int X;
+        public int Y;
+        
         public bool IsStart;
         
         public Point(int x, int y, bool start){
-            this.x = x;
-            this.y = y;
-            this.IsStart = start;
+            X = x;
+            Y = y;
+            IsStart = start;
+        }
+        
+        public int CompareTo(Point p)
+        {
+            if(p.X != this.X)
+                return X - p.X;
+            
+            if(this.IsStart && p.IsStart)
+                return p.Y - this.Y;
+            if(!this.IsStart && !p.IsStart)
+                return this.Y - p.Y;
+            
+            if(this.IsStart)
+                return -1;
+            else
+                return 1;
         }
     }
     public IList<IList<int>> GetSkyline(int[][] buildings) {
-        var points = GetAllPoints(buildings);
-        SortedSet<(int height, int indx)> heightsHeap = new SortedSet<(int height, int indx)>();
+        var points = GetSortedPoints(buildings);
         
-        int i =0;
-        heightsHeap.Add((0, i));
-        int curHeight = 0;
+        SortedSet<(int height, int indx)> heap = new SortedSet<(int height, int indx)>();
+        Dictionary<int, List<int>> heapElements = new Dictionary<int, List<int>>();
         IList<IList<int>> result = new List<IList<int>>();
-        Dictionary<int, List<int>> elements = new Dictionary<int, List<int>>();
+
+        int curHeight = 0, i=0;
+        heap.Add((0, i));
         
         foreach(var point in points){
-            // Console.WriteLine($"{point.y}");
             if(point.IsStart){
-                if(!elements.ContainsKey(point.y))
-                    elements.Add(point.y, new List<int>());
-                elements[point.y].Add(++i);
-                heightsHeap.Add((point.y, i));
+                if(!heapElements.ContainsKey(point.Y))
+                    heapElements.Add(point.Y, new List<int>());
+
+                heapElements[point.Y].Add(++i);
+                heap.Add((point.Y, i));
             }else {
-                var list = elements[point.y];
-                int last = list.Count - 1;
-                
-                heightsHeap.Remove((point.y, list[last]));
-                list.RemoveAt(last);
+                var list = heapElements[point.Y];
+                var lastIndx = list.Count - 1;
+                heap.Remove((point.Y, list[lastIndx]));
+                list.RemoveAt(lastIndx);
             }
             
-            var maxHeight = heightsHeap.Max.height;
-            // Console.WriteLine($"{curHeight} -- {maxHeight}");
+            int maxHeight = heap.Max.height;
             if(curHeight != maxHeight){
-                result.Add(new List<int>{point.x, maxHeight});
+                result.Add(new List<int> {point.X, maxHeight});
                 curHeight = maxHeight;
             }
         }
@@ -46,37 +61,17 @@ public class Solution {
         return result;
     }
     
-    private List<Point> GetAllPoints(int[][] buildings){
+    private List<Point> GetSortedPoints(int[][] buildings)
+    {
         List<Point> points = new List<Point>();
         foreach(var building in buildings){
-            int startX = building[0];
-            int endX = building[1];
-            int y = building[2];
-            
-            points.Add(new Point(startX, y, true));
-            points.Add(new Point(endX, y, false));
+            int startX = building[0], endX = building[1];
+            int height = building[2];
+            points.Add(new Point(startX, height, true));
+            points.Add(new Point(endX, height, false));
         }
         
-        points.Sort((a, b) => {
-            if(a.x != b.x) 
-               return a.x - b.x;
-            
-            //Consider larger height between same starts
-            if(a.IsStart && b.IsStart)
-                return b.y - a.y;
-            //Consider shorter height between same ends
-            if(!a.IsStart && !b.IsStart)
-                return a.y - b.y;
-            //Consider start over end between same start and end position
-            if(a.IsStart)
-                return -1;
-            else
-                return 1;
-        });
-        
-        // foreach(var point in points){
-        //     Console.WriteLine($"{point.x} - {point.y}");
-        // }
+        points.Sort();
         return points;
     }
 }
