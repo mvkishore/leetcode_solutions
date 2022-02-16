@@ -21,9 +21,6 @@ public class Solution {
         if(start > end)
             return null;
         
-        if(start == end)
-            return new TreeNode(nums[start]);
-        
         int mid = (start + end) / 2;
         TreeNode root = new TreeNode(nums[mid]);
         root.left = BuildBST(nums, start, mid - 1);
