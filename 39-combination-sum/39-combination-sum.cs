@@ -1,27 +1,27 @@
 public class Solution {
     public IList<IList<int>> CombinationSum(int[] candidates, int target) {
         IList<IList<int>> res = new List<IList<int>>();
+        IList<int> combo = new List<int>();
         Array.Sort(candidates);
-        Combination(candidates, 0, target, new List<int>(), res);
+        
+        Generate(candidates, 0, target, combo, res);
         return res;
     }
     
-    private void Combination(int[] candidates, int cur, int target, IList<int> list, IList<IList<int>> res)
+    private void Generate(int[] cands, int cur, int target, IList<int> combo, IList<IList<int>> res)
     {
-        int n = candidates.Length;
-        if(target < 0 || cur >= n)
+        int n = cands.Length;
+        if(cur >= n || target < 0)
             return;
-        if(target == 0){
-            res.Add(new List<int>(list));
-            return;
-        }
         
-        for(int i=cur; i < n && candidates[i] <= target; i++){
-            int val = candidates[i];
-
-            list.Add(val);
-            Combination(candidates, i, target - val, list, res);
-            list.RemoveAt(list.Count - 1);
+        if(target == 0)
+            res.Add(new List<int>(combo));
+        
+        for(int i=cur; i<n && cands[i] <= target; i++){
+            int val = cands[i];
+            combo.Add(val);
+            Generate(cands, i, target - val, combo, res);
+            combo.RemoveAt(combo.Count - 1);
         }
     }
 }
