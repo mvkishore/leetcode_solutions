@@ -8,17 +8,9 @@ public class MinStack {
     }
     
     public void Push(int val) {
-        if(values.Count == 0)
-        {
-            values.Push(val);
-            mins.Push(val);
-            return;
-        }
-        
-        if(mins.Count > 0 && mins.Peek() >= val){
+        if(mins.Count == 0 || mins.Peek() >= val){
             mins.Push(val);
         }
-        
         values.Push(val);
     }
     
