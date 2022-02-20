@@ -8,13 +8,12 @@ public class Solution {
             if(IsOverlap(firstList[left], secondList[right])){
                 var merge = Merge(firstList[left], secondList[right]);
                 res.Add(merge);
-                if(firstList[left][1] <= merge[1])
-                    left++;
-                else
-                    right++;
-            }else if(firstList[left][1] < secondList[right][1]){
+            }
+            
+            if(firstList[left][1] < secondList[right][1])
                 left++;
-            }else right++;
+            else 
+                right++;
         }
         return res.ToArray();
     }
