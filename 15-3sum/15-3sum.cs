@@ -1,36 +1,43 @@
 public class Solution {
     public IList<IList<int>> ThreeSum(int[] nums) {
+        IList<IList<int>> res = new List<IList<int>>();
         int n = nums.Length;
         if(n < 3)
-            return new List<IList<int>>();
+            return res;
         
         Array.Sort(nums);
-        IList<IList<int>> res = new List<IList<int>>();
         
         for(int i=0; i<n; i++){
-            int a = nums[i];
-            TwoSum(nums, a, res, i+1);
-            while(i+1 < n && nums[i+1] == nums[i])
+            CheckSum(nums, i, res);
+            while(i + 1<n && nums[i] == nums[i + 1])
                 i++;
         }
         return res;
     }
     
-    private void TwoSum(int[] nums, int a, IList<IList<int>> res, int start)
+    private void CheckSum(int[] nums, int i, IList<IList<int>> res)
     {
-        int l=start, n = nums.Length, r = n - 1;
-        while(l < r){
-            int b = nums[l], c = nums[r];
-            int sum = a + b + c;
-            if( sum == 0){
-                res.Add(new List<int>(){ a, b, c});
-                while(l+1 < n && nums[l+1] == nums[l])
-                    l++;
-                l++; r--;
+        int n = nums.Length, j = i+1, k = n -1;
+        while(j < k){
+            int sum = nums[i] + nums[j] + nums[k];
+            if(sum == 0){
+                res.Add(new List<int>{nums[i], nums[j], nums[k]});
+                
+                while(j + 1 < n && nums[j] == nums[j + 1])
+                    j++;
+                
+                while(k - 1 >= 0 && nums[k] == nums[k - 1])
+                    k--;
+                j++;
+                k--;
             }else if(sum < 0){
-                 l++;
+                while(j + 1 < n && nums[j] == nums[j + 1])
+                    j++;
+                j++;
             }else {
-                 r--;
+                while(k - 1 >= 0 && nums[k] == nums[k - 1])
+                    k--;
+                k--;
             }
         }
     }
