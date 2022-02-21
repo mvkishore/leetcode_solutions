@@ -1,23 +1,25 @@
 public class Solution {
     public int LengthOfLongestSubstring(string s) {
+        int n = s.Length, maxLen = 0, l = 0,r = 0;
         int[] counter = new int[256];
-        int l = 0, r = 0, n = s.Length, len = 0;
+        bool repeating = false;
         
         while(r < n){
             counter[s[r]]++;
-            
-            while(counter[s[r]] > 1){
-                counter[s[l]]--;
-                
-                if(counter[s[l++]] == 1) {
-                    break;
-                }
-            }
+            if(counter[s[r]] > 1)
+                repeating = true;
             r++;
             
-            len = Math.Max(len, r - l);
+            while(repeating){
+                counter[s[l]]--;
+                if(counter[s[l]] == 1)
+                    repeating = false;
+                l++;
+            }
+            
+            maxLen = Math.Max(maxLen, r - l);
         }
         
-        return len;
+        return maxLen;
     }
 }
