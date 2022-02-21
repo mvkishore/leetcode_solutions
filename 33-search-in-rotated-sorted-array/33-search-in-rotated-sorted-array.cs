@@ -12,7 +12,7 @@ public class Solution {
                     hi = mid -1;
                 else low = mid + 1;
             }else {
-                if(nums[hi] >= target && target > nums[mid])
+                if(target > nums[mid] && target <= nums[hi])
                     low = mid + 1;
                 else hi = mid -1;
             }
