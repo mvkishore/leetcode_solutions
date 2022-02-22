@@ -1,22 +1,20 @@
 public class Solution {
     public bool IsValid(string s) {
-        Dictionary<char, char> openBracketMap = new Dictionary<char, char>(){
-            {'(',')'},
-            {'[',']'},
-            {'{','}'}
+        Stack<char> stack = new Stack<char>();
+        Dictionary<char, char> parenthMap = new Dictionary<char, char>(){
+            {')', '(' },
+            {']', '[' },
+            {'}', '{' },
         };
         
-        Stack<char> seenBrackets = new Stack<char>();
-        foreach(var b in s){
-            if(openBracketMap.ContainsKey(b)){
-                seenBrackets.Push(openBracketMap[b]);
-            }else{
-                if(seenBrackets.Count == 0)
+        foreach(var c in s){
+            if(parenthMap.ContainsKey(c)){
+                if(stack.Count == 0 || stack.Pop() != parenthMap[c])
                     return false;
-                if(seenBrackets.Pop() != b)
-                    return false;
+            }else {
+                stack.Push(c);
             }
         }
-        return seenBrackets.Count == 0;
+        return stack.Count == 0;
     }
 }
