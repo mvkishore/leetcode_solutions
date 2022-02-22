@@ -11,29 +11,26 @@
  */
 public class Solution {
     public ListNode MergeKLists(ListNode[] lists) {
-        SortedSet<(int val, int idx, ListNode node)> heap = new SortedSet<(int val, int idx, ListNode node)>();
-        ListNode dummyHead = new ListNode();
-        ListNode trav = dummyHead;
-        int k=0;
-        for(int i=0; i<lists.Length; i++){
-            if(lists[i] != null)
-                heap.Add((lists[i].val, k++, lists[i]));
-        }
+        ListNode dummy = new ListNode(0);
+        PriorityQueue<ListNode, int> heap = new PriorityQueue<ListNode, int>();
+        if(lists == null)
+            return dummy.next;
         
+        foreach(var head in lists){
+            if(head != null)
+                heap.Enqueue(head, head.val);
+        }
+        var trav = dummy;
         while(heap.Count > 0){
-            var min = heap.Min;
-            heap.Remove(min);
+            var min = heap.Dequeue();
+            trav.next = min;
             
-            var node = min.node;
-            var next = node.next;
+            if(min.next != null)
+                heap.Enqueue(min.next, min.next.val);
             
-            trav.next = node;
-            if(next != null)
-                heap.Add((next.val, k++, next));
-           
             trav = trav.next;
         }
         
-        return dummyHead.next;
+        return dummy.next;
     }
 }
