@@ -14,10 +14,11 @@ public class Solution {
                 matrix[n - col - 1][row] = matrix[n - row - 1][n - col - 1];
                 
                 //down <- right
-                matrix[n - row - 1][n - col - 1] = matrix[col][n - row -1];
-                        
+                matrix[n - row - 1][n - col - 1] = matrix[col][n - row - 1];
+                
                 //right <- top
-                matrix[col][n - row  - 1] = temp;
+                matrix[col][n - row -1] = temp;
+                
             }
         }
     }
