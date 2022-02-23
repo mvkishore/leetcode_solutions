@@ -1,26 +1,33 @@
 public class Solution {
     public string MinWindow(string s, string t) {
-        int n = s.Length, start=0, end=0, m = t.Length;
-        int[] chars = new int[256];
+        int m = s.Length, n = t.Length;
+        int[] counter = new int[256];
         
-        foreach(var c in t){
-            chars[c]++;
-        }
         
-        int minLen = int.MaxValue;
-        int startIndx = 0, counter = 0;
-        while(end < n){
-            if(chars[s[end++]]-- > 0) counter++;
+        foreach(var c in t)
+            counter[c]++;
+        
+        int l = 0, r = 0, seenCharsOfT = 0, minLen = int.MaxValue, startIndx = -1;
+       
+        while(r < m){
+            if(counter[s[r]] > 0)
+                seenCharsOfT++;
             
-            while(counter == m){
-                if(minLen >= end - start){
-                    minLen = end - start;
-                    startIndx = start;
+            counter[s[r]]--;
+            r++;
+            while(seenCharsOfT == n){
+                int len = r - l;
+                if(len < minLen){
+                    minLen = len;
+                    startIndx = l;
                 }
-                if(chars[s[start++]]++ == 0) counter--;
+                counter[s[l]]++;
+                if(counter[s[l]] > 0) seenCharsOfT--;
+                l++;
             }
         }
-        return minLen == int.MaxValue ? string.Empty : s.Substring(startIndx, minLen);
+        if(startIndx < 0)
+            return string.Empty;
+        return s.Substring(startIndx, minLen);
     }
-    
 }
