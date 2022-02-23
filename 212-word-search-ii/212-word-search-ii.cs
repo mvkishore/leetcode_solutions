@@ -1,83 +1,77 @@
 public class Solution {
-    public class TrieNode{
-        public Dictionary<char, TrieNode> Childrens;
-        public string Word;
+    public class TrieNode {
+        public TrieNode[] childrens;
+        public string word;
         
         public TrieNode(){
-            Childrens = new Dictionary<char, TrieNode>();
+            childrens = new TrieNode[26];
         }
     }
     public IList<string> FindWords(char[][] board, string[] words) {
+        IList<string> results = new List<string>();
         TrieNode root = new TrieNode();
         
-        foreach(var word in words){
+        foreach(var word in words)
             AddWord(word, root);
+        Search(board, root, results);
+        return results;
+    }
+    
+    public void AddWord(string word, TrieNode root){
+        var cur = root;
+        foreach(var c in word){
+            if(cur.childrens[c-'a'] == null)
+                cur.childrens[c - 'a'] = new TrieNode();
+            cur = cur.childrens[c - 'a'];
         }
-        
-        int rows = board.Length;
-        int cols = board[0].Length;
-        IList<string> res = new List<string>();
-        
-        for(int row=0; row<rows; row++){
-            for(int col=0; col< cols; col++){
-                if(root.Childrens.ContainsKey(board[row][col])){
-                    FindWords(board, row, col, root, res);
-                }
+        cur.word = word;
+    }
+    
+    private void Search(char[][] board, TrieNode root, IList<string> results) {
+        int m = board.Length, n = board[0].Length;
+        for(int row=0; row < m; row++){
+            for(int col=0; col < n; col++){
+                if(root.childrens[board[row][col] - 'a'] != null)
+                    Search(board, row, col, root, results);
             }
         }
-        
-        return res;
     }
     
-    private void FindWords(char[][] board, int row, int col, TrieNode trie, IList<string> res)
-    {
-        int rows = board.Length;
-        int cols = board[0].Length;
-        char letter = board[row][col];
+    private void Search(char[][] board, int row, int col, TrieNode root, IList<string> results){
+        int m = board.Length, n = board[0].Length;
+        var c = board[row][col];
+        var curNode = root.childrens[c-'a'];
         
-        var curNode = trie.Childrens[letter];
-        if(!string.IsNullOrEmpty(curNode.Word)){
-            res.Add(curNode.Word);
-            curNode.Word = string.Empty;
+        if(curNode.word != null){
+            results.Add(curNode.word);
+            curNode.word = null;
         }
-        board[row][col] = '#';
+        board[row][col] = '-';
         
-        foreach(var next in GetNextMoves(row, col, rows, cols)){
-            if(curNode.Childrens.ContainsKey(board[next[0]][next[1]]))
-                FindWords(board, next[0], next[1], curNode, res);
+        foreach(var next in GetNext(row, col, m, n)){
+            int nextRow = next[0], nextCol = next[1];
+            var nC = board[nextRow][nextCol];
+
+            if(nC != '-' && curNode.childrens[nC - 'a'] != null)
+                Search(board, nextRow, nextCol, curNode, results);
         }
+        board[row][col] = c;
         
-        board[row][col] = letter;
-        
-        //optimization
-        if(curNode.Childrens.Count ==0)
-        {
-            trie.Childrens.Remove(letter);
-        }
+        if(curNode.childrens.Count(x=> x != null) == 0)
+            root.childrens[c - 'a'] = null;
     }
     
-    private List<int[]> GetNextMoves(int row, int col, int rows, int cols)
-    {
-        var res = new List<int[]>();
-        
-        var dirs = new int[][] {new []{0,1}, new []{0,-1}, new []{-1,0}, new []{1, 0}};
+    private List<int[]> GetNext(int row, int col, int rows, int cols){
+        var dirs = new int[][] {new []{0, 1}, new []{0, -1}, new []{1, 0}, new []{-1, 0}};
+        List<int[]> list = new List<int[]>();
         
         foreach(var dir in dirs){
-            int nextRow = row + dir[0], nextCol = col + dir[1];
-            
-            if(nextRow >= 0 && nextRow < rows && nextCol >=0 && nextCol < cols)
-                res.Add(new int[]{ nextRow, nextCol});
+            var nextRow = row + dir[0];
+            var nextCol = col + dir[1];
+            if(nextRow >= 0 && nextRow < rows && nextCol >= 0 && nextCol < cols)
+                list.Add(new []{nextRow, nextCol});
         }
-        return res;
+        return list;
     }
     
-    private void AddWord(string word, TrieNode root){
-        foreach(var c in word){
-            if(!root.Childrens.ContainsKey(c))
-                root.Childrens.Add(c, new TrieNode());
-            
-            root = root.Childrens[c];
-        }
-        root.Word = word;
-    }
 }
