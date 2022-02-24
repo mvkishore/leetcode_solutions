@@ -1,35 +1,35 @@
 public class Solution {
     public int[][] Insert(int[][] intervals, int[] newInterval) {
-        int start = newInterval[0];
+        List<int[]> list = new List<int[]>();
         int n = intervals.Length;
-        int i=0;
+
+        int i =0;
+        while(i < n && intervals[i][1] < newInterval[0]){
+            list.Add(intervals[i]);
+            i++;
+        }
         
-        IList<int[]> res = new List<int[]>();
+        var prev = newInterval;
         while(i < n){
-            int curEnd = intervals[i][1];
-            if(curEnd >= start)
-                break;
-            res.Add(intervals[i++]);
-        }
-        
-        for(int j=i; j < n; j++){
-            if(IsOvralap(newInterval, intervals[j])){
-                newInterval = merge(newInterval, intervals[j]);
-            } else {
-                res.Add(newInterval);
-                newInterval = intervals[j];
+            var cur = intervals[i];
+            if(IsOverlap(prev, cur)){
+                prev = Merge(prev, cur);
+            }else{
+                list.Add(prev);
+                prev = cur;
             }
+            i++;
         }
         
-        res.Add(newInterval);
-        return res.ToArray();
+        list.Add(prev);
+        return list.ToArray();
     }
     
-    private bool IsOvralap(int[] x, int[] y){
-        return x[0] <= y[1] && y[0] <= x[1];
+    private bool IsOverlap(int[] a, int[] b){
+        return a[0] <= b[1] && b[0] <= a[1];
     }
     
-    private int[] merge(int[] x, int[] y){
-        return new int[]{ Math.Min(x[0], y[0]), Math.Max(x[1], y[1])};
+    private int[] Merge(int[] a, int[] b){
+        return new int[]{Math.Min(a[0], b[0]), Math.Max(a[1], b[1])};
     }
 }
