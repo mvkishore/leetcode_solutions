@@ -10,48 +10,57 @@
  * }
  */
 public class Solution {
-    public ListNode SortList(ListNode head) {
-        if(head == null || head.next == null)
+     public ListNode SortList(ListNode head) {
+        if(head == null)
+            return null;
+        
+        if(head.next == null)
             return head;
+    
+        ListNode mid = GetMid(head);
         
-        var mid = GetMid(head);
+        var sortedLeft = SortList(head);
+        var sortedRight = SortList(mid);
         
-        var leftList = SortList(head);
-        var rightList = SortList(mid);
-        
-        return Merge(leftList, rightList);
+        return Merge(sortedLeft, sortedRight);
     }
     
-    private ListNode Merge(ListNode left, ListNode right){
-        var dummyHead = new ListNode(0);
-        var trav = dummyHead;
+    private ListNode GetMid(ListNode head){
+        if(head == null)
+            return null;
         
-        while(left != null && right != null) {
-            if(left.val < right.val) {
-                trav.next = left;
-                left = left.next;
-            } else {
-                trav.next = right;
-                right = right.next;
+        ListNode fast = head, slow = head, prev = null;
+        while(fast != null && fast.next != null)
+        {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        var mid = prev.next;
+        prev.next = null;
+        return mid;
+    }
+    
+    private ListNode Merge(ListNode list1, ListNode list2){
+        ListNode dummy = new ListNode(0);
+        var trav = dummy;
+        
+        while(list1 != null && list2 != null){
+            if(list1.val < list2.val){
+                trav.next = list1;
+                list1 = list1.next;
+            }else{
+                trav.next = list2;
+                list2 = list2.next;
             }
             trav = trav.next;
         }
         
-        trav.next = right == null ? left : right;
-        return dummyHead.next;
+        trav.next = list1 ?? list2;
+        
+        return dummy.next;
     }
     
-    private ListNode GetMid(ListNode head)
-    {
-        ListNode midPrev = null;
-        ListNode fast = head, slow = head;
-        
-        while(fast != null && fast.next != null){
-            midPrev = slow;
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        midPrev.next = null;
-        return slow;
-    }
+    
 }
