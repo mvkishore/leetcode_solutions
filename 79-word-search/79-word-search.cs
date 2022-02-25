@@ -15,27 +15,39 @@ public class Solution {
     }
     
     private bool Exist(char[][] board, int row, int col, int index, string word, bool[,] visited){
-        if(index > word.Length)
-            return false;
-        
         if(index == word.Length)
             return true;
         
-        int rows = board.Length, cols = board[0].Length;
+        if(index == word.Length - 1 && board[row][col] == word[index])
+            return true;
         
-        if(row < 0 || row >= rows || col < 0 || col >= cols || visited[row, col])
-            return false;
-        
-        if(word[index] != board[row][col])
+        if(board[row][col] != word[index])
             return false;
         
         visited[row, col] = true;
-        var exist = Exist(board, row + 1, col, index + 1, word, visited)
-                    || Exist(board, row , col + 1, index + 1, word, visited)
-                    || Exist(board, row - 1, col, index + 1, word, visited)
-                    || Exist(board, row, col - 1, index + 1, word, visited);
+        foreach(var next in GetNextMove(row, col, board))
+        {
+            int nextRow = next[0], nextCol = next[1];
+            if(!visited[nextRow, nextCol] 
+               && Exist(board, nextRow, nextCol, index + 1, word, visited)){
+                return true;
+            }
+        }
         visited[row, col] = false;
+        return false;
+    }
+    private List<int[]> GetNextMove(int row, int col, char[][] board)
+    {
+        int rows = board.Length, cols = board[0].Length;
+        List<int[]> nextMoves = new List<int[]>();
+        var dirs = new int[][] {new []{0, 1}, new []{1, 0},new []{-1, 0},new []{0, -1}};
         
-        return exist;
+        foreach(var dir in dirs){
+            int nextRow = row + dir[0], nextCol = col + dir[1];
+            if(nextRow < rows && nextRow >= 0 && nextCol < cols && nextCol >= 0){
+                nextMoves.Add(new []{nextRow, nextCol});
+            }
+        }
+        return nextMoves;
     }
 }
