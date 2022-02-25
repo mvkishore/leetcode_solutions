@@ -6,9 +6,6 @@ public class Solution {
     }
     
     private int? NumDecodings(string s, int index, int?[] cache){
-        if(index > s.Length)
-            return 0;
-        
         if(index == s.Length)
             return 1;
         
@@ -30,6 +27,4 @@ public class Solution {
         return cache[index] = opt1 + opt2;
     }
 }
-
-//--> 1 1 106  --> 4: 1, 3: 0, 2: 1, 1: 1, 0: 2 <- anse
     
