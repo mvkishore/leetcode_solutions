@@ -12,33 +12,28 @@
  * }
  */
 public class Solution {
+    int index = 0;
     public TreeNode BuildTree(int[] preorder, int[] inorder) {
         int n = preorder.Length;
-        return BuildTree(preorder, 0, n-1, inorder, 0, n -1);
+        Dictionary<int, int> inorderIndex = new Dictionary<int, int>();
+        for(int i=0; i < n; i++){
+            inorderIndex.Add(inorder[i], i);
+        }
+        return BuildTree(preorder, 0, n-1, inorderIndex);
     }
     
-    private TreeNode BuildTree(int[] preorder, int pS, int pE, int[] inorder, int iS, int iE)
+    private TreeNode BuildTree(int[] preorder, int left, int right, Dictionary<int, int> inorder)
     {
-        if(pS > pE || iS > iE)
+        if(left > right || index >= preorder.Length)
             return null;
         
-        int rootVal = preorder[pS];
+        int rootVal = preorder[index++];
         var root = new TreeNode(rootVal);
         
-        if(iS == iE)
-            return root;
-        
-        int i = -1;
-        for(i = iS; i<= iE; i++){
-            if(inorder[i] == rootVal)
-                break;
-        }
-        
-        int leftTreeLength = i - iS;
-        int rightTreeLength = iE - i;
-            
-        root.left = BuildTree(preorder, pS + 1, pS + leftTreeLength, inorder, iS, i - 1);
-        root.right = BuildTree(preorder, pS + leftTreeLength + 1, pE, inorder, i+1, iE);
+        int i = inorder[rootVal];
+                 
+        root.left = BuildTree(preorder, left, i -1, inorder);
+        root.right = BuildTree(preorder, i + 1, right, inorder);
         
         return root;
     }
