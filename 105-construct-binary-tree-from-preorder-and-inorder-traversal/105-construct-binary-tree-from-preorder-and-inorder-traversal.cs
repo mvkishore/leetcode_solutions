@@ -10,36 +10,35 @@
  *         this.right = right;
  *     }
  * }
- 
-    20
- 
  */
 public class Solution {
     public TreeNode BuildTree(int[] preorder, int[] inorder) {
         int n = preorder.Length;
-        return BuildTree(preorder, 0, n-1, inorder, 0, n-1);
+        return BuildTree(preorder, 0, n-1, inorder, 0, n -1);
     }
     
-    private TreeNode BuildTree(int[] preorder, int pStart, int pEnd, int[] inorder, int iStart, int iEnd){
-        if(pStart > pEnd || iStart > iEnd )
+    private TreeNode BuildTree(int[] preorder, int pS, int pE, int[] inorder, int iS, int iE)
+    {
+        if(pS > pE || iS > iE)
             return null;
         
-        int val = preorder[pStart];
-        var root = new TreeNode(val);
+        int rootVal = preorder[pS];
+        var root = new TreeNode(rootVal);
         
-        if(pStart == pEnd)
+        if(iS == iE)
             return root;
         
-        int i;
-        for(i=iStart; i<=iEnd ; i++){
-            if(inorder[i] == val)
+        int i = -1;
+        for(i = iS; i<= iE; i++){
+            if(inorder[i] == rootVal)
                 break;
         }
         
-        int len = i - iStart - 1;
-        
-        root.left = BuildTree(preorder, pStart + 1, pStart + 1 + len, inorder, iStart, i-1);
-        root.right = BuildTree(preorder, pStart + len + 2, pEnd, inorder, i+1, iEnd);
+        int leftTreeLength = i - iS;
+        int rightTreeLength = iE - i;
+            
+        root.left = BuildTree(preorder, pS + 1, pS + leftTreeLength, inorder, iS, i - 1);
+        root.right = BuildTree(preorder, pS + leftTreeLength + 1, pE, inorder, i+1, iE);
         
         return root;
     }
