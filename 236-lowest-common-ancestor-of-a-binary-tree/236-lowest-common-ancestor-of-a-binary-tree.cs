@@ -16,8 +16,7 @@ public class Solution {
             return root;
         
         var x = LowestCommonAncestor(root.left, p, q);
-        
-        if(x != null && x != p && x != q)
+        if(x != null && x != p && x!= q)
             return x;
         
         var y = LowestCommonAncestor(root.right, p, q);
@@ -27,8 +26,7 @@ public class Solution {
         
         if(x != null && y != null)
             return root;
-        else if(x == null)
-            return y;
-        else return x;
+        
+        return x ?? y;
     }
 }
