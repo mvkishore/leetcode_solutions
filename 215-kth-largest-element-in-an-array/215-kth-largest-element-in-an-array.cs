@@ -1,7 +1,6 @@
 public class Solution {
     public int FindKthLargest(int[] nums, int k) {
         int n = nums.Length;
-        
         return QuickSelect(nums, 0, n-1, n - k);
     }
     
@@ -10,31 +9,26 @@ public class Solution {
         if(left == right)
             return nums[left];
         
-        int n = nums.Length;
-        
-        var pos = Partition(nums, left, right);
-        
-        if(pos == k)
-            return nums[pos];
-        if(pos < k){
-            return QuickSelect(nums, pos + 1, right, k);
-        }
-        return QuickSelect(nums, left, pos - 1, k);
+        int p = Partition(nums, left, right);
+        if(p == k)
+            return nums[p];
+        else if(p < k)
+            return QuickSelect(nums, p + 1, right, k);
+        return QuickSelect(nums, left, p - 1, k);
     }
     
-    private int Partition(int[] nums, int left, int right)
-    {
+    private int Partition(int[] nums, int left, int right){
         int pivot = nums[right];
         
-        int i = left;
-        for(int j = left; j < right; j++){
-            if(nums[j] < pivot){
-                Swap(nums, j, i++);
+        int p = left;
+        for(int i=left; i < right; i++){
+            if(nums[i] < pivot){
+                Swap(nums, i, p++);
             }
         }
         
-        Swap(nums, i, right);
-        return i;
+        Swap(nums, p, right);
+        return p;
     }
     
     private void Swap(int[] nums, int i, int j){
