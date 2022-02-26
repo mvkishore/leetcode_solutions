@@ -1,21 +1,20 @@
+//3,14,1,7
+//[3, 17, 18, 25]   16
 public class Solution {
-    int sum = 0;
-    int[] arr;
-    //[1, 3, 5, 2, 4]
-    
-    //sum = 14
-    //14 13 10 5 3 -1
+    int[] w;
+    int sum;
     public Solution(int[] w) {
-        sum = w.Sum();
-        arr = w;
+        this.sum = w.Sum();
+        this.w = w;
     }
     
     public int PickIndex() {
-        int idx = new Random().Next(sum);
+        var idx = new Random().Next(sum);
+        int i=0;
         
-        int i = 0;
         while(idx >= 0)
-            idx -= arr[i++];
+            idx -= w[i++];
+        
         return i - 1;
     }
 }
