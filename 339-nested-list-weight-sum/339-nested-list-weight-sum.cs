@@ -32,16 +32,14 @@ public class Solution {
         return DepthSum(nestedList, 1);
     }
     
-    private int DepthSum(IList<NestedInteger> nestedList, int depth)
-    {
+    private int DepthSum(IList<NestedInteger> list, int depth){
         int sum = 0;
-        foreach(var nestedInteger in nestedList){
-            if(nestedInteger.IsInteger())
-                sum += nestedInteger.GetInteger() * depth;
+        foreach(var nInt in list){
+            if(nInt.IsInteger())
+                sum += depth * nInt.GetInteger();
             else
-                sum += DepthSum(nestedInteger.GetList(), depth + 1);
+                sum += DepthSum(nInt.GetList(), depth + 1);
         }
-        
         return sum;
     }
 }
