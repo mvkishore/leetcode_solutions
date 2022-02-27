@@ -12,10 +12,10 @@ public class MedianFinder {
             return;
         }
         
-        if(minHeap.Count > 0 && minHeap.Peek() < num)
-            minHeap.Enqueue(num,num);
+        if(maxHeap.Count > 0 && maxHeap.Peek() > num)
+            maxHeap.Enqueue(num,num);
         else
-            maxHeap.Enqueue(num, num);
+            minHeap.Enqueue(num, num);
         
         BalanceHeaps();
     }
