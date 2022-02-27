@@ -1,63 +1,48 @@
 public class MedianFinder {
-    private SortedSet<(int val, long indx)> leftPart;
-    private SortedSet<(int val, long indx)> rightPart;
-    private long indx = 0;
+    PriorityQueue<int, int> maxHeap;
+    PriorityQueue<int, int> minHeap;
     public MedianFinder() {
-        leftPart = new SortedSet<(int, long)>();
-        rightPart = new SortedSet<(int, long)>();
+        maxHeap = new PriorityQueue<int, int>(Comparer<int>.Create((a, b)=> b.CompareTo(a)));
+        minHeap = new PriorityQueue<int, int>();
     }
     
     public void AddNum(int num) {
-        if(leftPart.Count == 0){
-            leftPart.Add((num, indx++));
+        if(maxHeap.Count == 0){
+            maxHeap.Enqueue(num, num);
             return;
         }
         
-        var max = leftPart.Max;
-        var min = (rightPart.Count > 0) ? rightPart.Min : (int.MinValue, indx++);
-        
-        if(num < max.val)
-            leftPart.Add((num, indx++));
+        if(minHeap.Count > 0 && minHeap.Peek() < num)
+            minHeap.Enqueue(num,num);
         else
-            rightPart.Add((num, indx++));
+            maxHeap.Enqueue(num, num);
         
-        Balance();
+        BalanceHeaps();
     }
     
-    private void Balance(){
-        int leftLen = leftPart.Count;
-        int rightLen = rightPart.Count;
-        if(leftLen != rightLen){
-            var diff = Math.Abs(leftLen - rightLen);
-            if(diff == 1 && rightLen > leftLen) {
-                var min = Pop(rightPart, MinOrMax.MIN);
-                leftPart.Add(min);
-            } else if(diff == 2) {
-                var max = Pop(leftPart, MinOrMax.MAX);
-                rightPart.Add(max);
+    private void BalanceHeaps(){
+        if(Math.Abs(maxHeap.Count - minHeap.Count) > 1){
+            if(maxHeap.Count > minHeap.Count){
+                var num = maxHeap.Dequeue();
+                minHeap.Enqueue(num, num);
+            } else {
+                var num = minHeap.Dequeue();
+                maxHeap.Enqueue(num, num);
             }
         }
-    }
-    public enum MinOrMax {
-        MIN,
-        MAX
-    }
-    private (int, long) Pop(SortedSet<(int, long)> heap, MinOrMax minOrmax)
-    {
-        var minOrMax = MinOrMax.MIN == minOrmax ? heap.Min : heap.Max;
-        heap.Remove(minOrMax);
-        return minOrMax;
+        
+        if(minHeap.Count > maxHeap.Count){
+            var num = minHeap.Dequeue();
+            maxHeap.Enqueue(num, num);
+        }
     }
     
     public double FindMedian() {
-        int leftLen = leftPart.Count;
-        int rightLen = rightPart.Count;
-        if(leftLen == 0)
-            return 0;
-        
-        if(leftLen == rightLen)
-            return (leftPart.Max.val + rightPart.Min.val) / 2.0;
-        return leftPart.Max.val*1.0;
+        if(maxHeap.Count == minHeap.Count)
+        {
+            return (maxHeap.Peek() + minHeap.Peek()) / 2.0;
+        }
+        return 1.0 * maxHeap.Peek();
     }
 }
 
