@@ -16,6 +16,9 @@ public class Solution {
         var prev = words[0];
         for(int i=1; i < n; i++){
             var cur = words[i];
+            
+            if(prev == cur) continue;
+            
             bool noMatch = true;
             for(int j=0; j < Math.Min(prev.Length, cur.Length); j++){
                 if(prev[j] != cur[j]){
