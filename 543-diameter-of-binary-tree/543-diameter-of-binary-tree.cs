@@ -12,21 +12,21 @@
  * }
  */
 public class Solution {
-    int diameter =0;
+    int dia = int.MinValue;
     public int DiameterOfBinaryTree(TreeNode root) {
-        Height(root);
-        return diameter;
+        Depth(root, 0);
+        return dia;
     }
     
-    private int Height(TreeNode root){
+    public int Depth(TreeNode root, int depth){
         if(root == null)
             return 0;
         
-        int leftHeight = Height(root.left);
-        int rightHeight = Height(root.right);
+        int leftDepth = Depth(root.left, depth + 1);
+        int rightDepth = Depth(root.right, depth + 1);
+
+        dia = Math.Max(dia, leftDepth + rightDepth);
         
-        diameter = Math.Max(diameter, leftHeight + rightHeight);
-        
-        return 1 + Math.Max(leftHeight, rightHeight);
+        return 1 + Math.Max(leftDepth, rightDepth);;
     }
 }
