@@ -1,66 +1,66 @@
 public class Solution {
+    public class DisjointSet {
+        int[] parent;
+        int size;
+        public DisjointSet(int size){
+            this.size = size;
+            parent = new int[size];
+            for(int i=0; i<size; i++)
+                parent[i] = i;
+        }
+        
+        public void Union(int x, int y) {
+            int pX = Find(x), pY = Find(y);
+            if(pX != pY) {
+                parent[pX] = pY;
+                size--;
+            }
+        }
+        public int Size => size;
+        
+        public int Find(int id){
+            if(id == parent[id])
+                return id;
+            return parent[id] = Find(parent[id]);
+        }
+    }
+    
     public IList<IList<string>> AccountsMerge(IList<IList<string>> accounts) {
         int n = accounts.Count;
-        UnionFind uf = new UnionFind(n);
-        Dictionary<string, int> emailLookUp = new Dictionary<string, int>();
-        int i=0;
-        
-        while(i< n){
+        var ds = new DisjointSet(n);
+        Dictionary<string, int> seenEmails = new Dictionary<string, int>();
+        for(int i=0; i< n; i++){
             var account = accounts[i];
-            for(int j=1; j < account.Count; j++){
-                if(!emailLookUp.ContainsKey(account[j]))
-                    emailLookUp.Add(account[j], i);
-                else 
-                    uf.Union(emailLookUp[account[j]], i);
+            for(int e=1; e < account.Count; e++) {
+                var email = account[e];
+                if(seenEmails.ContainsKey(email))
+                    ds.Union(i, seenEmails[email]);
+                else
+                    seenEmails.Add(email, i);
             }
-            i++;
         }
-
-        Dictionary<int, SortedSet<string>> mergedAccounts = new Dictionary<int, SortedSet<string>>();
-        i = 0;
-        while(i < n){
-            int accountid = uf.Find(i);
-            if(!mergedAccounts.ContainsKey(accountid))
-                mergedAccounts.Add(accountid, new SortedSet<string>(StringComparer.Ordinal));
+        
+        Dictionary<int, SortedSet<string>> accountEmails = new Dictionary<int, SortedSet<string>>();
+        
+        for(int i=0; i < n; i++){
+            var pId = ds.Find(i);
+            var account = accounts[i];
             
-            var account = accounts[i];
-            for(int j=1; j<account.Count; j++){
-                mergedAccounts[accountid].Add(account[j]);
-            }
-            i++;
+            if(!accountEmails.ContainsKey(pId))
+                accountEmails.Add(pId, new SortedSet<string>(StringComparer.Ordinal));
+            
+            for(int e=1; e< account.Count; e++)
+                accountEmails[pId].Add(account[e]);
         }
         
-        IList<IList<string>> result = new List<IList<string>>();
-        foreach(var account in mergedAccounts){
+        var results = new List<IList<string>>();
+        
+        foreach(var key in accountEmails.Keys){
             var list = new List<string>();
-            
-            list.Add(accounts[account.Key][0]);
-            list.AddRange(mergedAccounts[account.Key].ToList());
-            
-            result.Add(list);
+            list.Add(accounts[key][0]);
+            list.AddRange(accountEmails[key].ToList());
+            results.Add(list);
         }
-        return result;
-    }
-    public class UnionFind {
-        int[] parent;
-        
-        public UnionFind(int n)
-        {
-            parent = new int[n];
-            for(int i=0; i<n; i++){
-                parent[i] = i;
-            }
-        }
-        
-        public void Union(int x, int y){
-            parent[Find(x)] = Find(y);
-        }
-        
-        public int Find(int x){
-            if(parent[x] == x)
-                return x;
-            
-            return parent[x] = Find(parent[x]);
-        }
+        return results;
     }
 }
