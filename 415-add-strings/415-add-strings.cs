@@ -4,23 +4,14 @@ public class Solution {
         StringBuilder sum = new StringBuilder();
         
         while(m >= 0 || n >= 0 || cary > 0){
-            if(m >=0 && n >= 0){
-                int d1 = num1[m--] - '0';
-                int d2 = num2[n--] - '0';
-                sum.Insert(0, (d1 + d2 + cary) % 10);
-                cary = (d1 + d2 + cary) / 10;
-            }else if(m >= 0){
-                int d1 = num1[m--] - '0';
-                sum.Insert(0, (d1 + cary) % 10);
-                cary = (d1 + cary) / 10;
-            } else if(n >= 0){
-                int d2 = num2[n--] - '0';
-                sum.Insert(0, (d2 + cary) % 10);
-                cary = (d2 + cary) / 10;
-            } else if(cary > 0){
-                sum.Insert(0, cary);
-                cary = 0;
-            }
+            int s = cary;
+            if(m >= 0)
+                s += num1[m--] - '0';
+            if(n >= 0)
+                s += num2[n--] - '0';
+            
+            sum.Insert(0, s % 10);
+            cary = s / 10;
         }
         return sum.ToString();
     }
