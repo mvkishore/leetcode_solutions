@@ -1,24 +1,23 @@
 public class Solution {
     public int[] ExclusiveTime(int n, IList<string> logs) {
-        int[] times = new int[n];//[3, 4]
+        int[] times = new int[n];
         Stack<int> stack = new Stack<int>();
         int runningFunc = 0, time = 0;
         foreach(var log in logs){
             var values = log.Split(":");
             var func = Convert.ToInt32(values[0]);
-            var act = values[1];
+            var isStart = values[1] == "start";
             var curTime = Convert.ToInt32(values[2]);
             
-            if(act == "end")
+            if(!isStart) 
                 curTime++;
             times[runningFunc] += curTime - time;
+
             time = curTime;
-            
-            if(act == "start")
-            {
+            if(isStart) {
                 stack.Push(runningFunc);
                 runningFunc = func;
-            }else{
+            } else {
                 runningFunc = stack.Pop();
             }
         }
