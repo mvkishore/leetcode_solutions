@@ -1,21 +1,27 @@
 public class Solution {
     public string AddStrings(string num1, string num2) {
-        StringBuilder sb = new StringBuilder();
-        int m = num1.Length, n = num2.Length;
-        int cary = 0, i = m -1, j = n - 1;
+        int cary = 0, m = num1.Length - 1, n = num2.Length - 1;
+        StringBuilder sum = new StringBuilder();
         
-        while(i >= 0 || j >= 0 || cary > 0){
-            int sum = cary;
-            if(i >= 0)
-                sum += num1[i--] - '0';
-            if(j >= 0)
-                sum += num2[j--] - '0';
-            
-            cary = sum / 10;
-            sb.Insert(0, sum % 10);
+        while(m >= 0 || n >= 0 || cary > 0){
+            if(m >=0 && n >= 0){
+                int d1 = num1[m--] - '0';
+                int d2 = num2[n--] - '0';
+                sum.Insert(0, (d1 + d2 + cary) % 10);
+                cary = (d1 + d2 + cary) / 10;
+            }else if(m >= 0){
+                int d1 = num1[m--] - '0';
+                sum.Insert(0, (d1 + cary) % 10);
+                cary = (d1 + cary) / 10;
+            } else if(n >= 0){
+                int d2 = num2[n--] - '0';
+                sum.Insert(0, (d2 + cary) % 10);
+                cary = (d2 + cary) / 10;
+            } else if(cary > 0){
+                sum.Insert(0, cary);
+                cary = 0;
+            }
         }
-        
-        return sb.ToString();
-        
+        return sum.ToString();
     }
 }
