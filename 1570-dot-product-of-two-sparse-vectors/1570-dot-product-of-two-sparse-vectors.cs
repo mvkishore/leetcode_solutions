@@ -12,6 +12,9 @@ public class SparseVector {
     
     // Return the dotProduct of two sparse vectors
     public int DotProduct(SparseVector vec) {
+        if(values.Count > vec.Values.Count)
+            return vec.DotProduct(this);
+        
         int res = 0;
         foreach(var key in values.Keys){
             if(vec.Values.ContainsKey(key)){
