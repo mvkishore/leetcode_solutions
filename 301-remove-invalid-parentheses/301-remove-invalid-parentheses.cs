@@ -2,7 +2,9 @@ public class Solution {
     public IList<string> RemoveInvalidParentheses(string s) {
         IList<string> res = new List<string>();
         Queue<string> queue = new Queue<string>();
+        
         HashSet<string> visited = new HashSet<string>();
+        
         queue.Enqueue(s);
         visited.Add(s);
         while(queue.Count > 0){
@@ -28,6 +30,8 @@ public class Solution {
                    }
                 }
             }
+            if(res.Count > 0)
+                return res;
         }
         return res;
     }
