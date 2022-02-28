@@ -1,21 +1,30 @@
 public class Solution {
     public bool ValidWordAbbreviation(string word, string abbr) {
-        int p1=0, m = word.Length, p2 = 0, n = abbr.Length;
-        int num = 0;
-        while(p1 < m && p2 < n){
-            if(char.IsDigit(abbr[p2])){
-                num = num*10 + abbr[p2] - '0';
-                if(num == 0)
-                    return false;
-                
-            } else if(p1 + num < m && word[p1+num] == abbr[p2]){
-                p1 += num;
-                num = 0;
-                p1++;
-            } else 
+        int num = 0, n = abbr.Length, m = word.Length;
+        int i = 0, j = 0;
+        if(n > m)
+            return false;
+        //  word = "internationalization", abbr = "i12iz4n"
+        while(j < n){
+            if(char.IsDigit(abbr[j]))
+            {
+                if(num == 0 && abbr[j] == '0') return false;
+                num = num * 10 + abbr[j] - '0';
+                j++;
+                continue;
+            } 
+            
+            if(num > 0 && i + num < m && abbr[j] != word[i + num])
                 return false;
-            p2++;
+            else if(num == 0 && i < m && abbr[j] != word[i])
+                return false;
+            j++;
+            i += num + 1;
+            num = 0;
         }
-        return num == m - p1 && p2 == n;
+        if(num > 0){
+            i += num;
+        }
+        return i == m;
     }
 }
