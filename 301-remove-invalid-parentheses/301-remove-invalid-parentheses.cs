@@ -21,10 +21,12 @@ public class Solution {
                    for(int j=0; j < cur.Length; j++) {
                        if(cur[j] == '(' || cur[j] == ')')
                        {
-                           var next = cur.Substring(0, j) + cur.Substring(j+1, cur.Length - j - 1);
-                           if(!visited.Contains(next)){
-                               visited.Add(next);
-                               queue.Enqueue(next);
+                           if(j == 0 || (j > 0 && cur[j-1] != cur[j])) {
+                               var next = cur.Substring(0, j) + cur.Substring(j+1, cur.Length - j - 1);
+                               if(!visited.Contains(next)){
+                                   visited.Add(next);
+                                   queue.Enqueue(next);
+                               }
                            }
                        }
                    }
