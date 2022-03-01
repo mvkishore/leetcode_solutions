@@ -1,10 +1,10 @@
 public class Solution {
     public int[] CountBits(int n) {
-        int[] res = new int[n+1];
-        for(int i=1; i<= n; i++){
-            res[i] = res[i >> 1] + (i & 1);
+        int[] ans = new int[n + 1];
+        for (int x = 1; x <= n; ++x) {
+            // x / 2 is x >> 1 and x % 2 is x & 1
+            ans[x] = ans[x >> 1] + (x & 1); 
         }
-        return res;
+        return ans;
     }
 }
-        
