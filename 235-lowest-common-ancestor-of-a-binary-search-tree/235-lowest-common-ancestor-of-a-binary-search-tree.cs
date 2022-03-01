@@ -10,18 +10,18 @@
 
 public class Solution {
     public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null)
-            return root;
-        if(root == p || root == q)
-            return root;
+        int pVal = p.val;
+        int qVal = q.val;
         
-        if((root.val < p.val && root.val > q.val) || (root.val > p.val && root.val < q.val))
-            return root;
-        
-        if(root.val < p.val && root.val < q.val){
-            return LowestCommonAncestor(root.right, p, q);
+        while(root != null){
+            var val = root.val;
+            
+            if(val > pVal && val > qVal)
+                root = root.left;
+            else if(val < pVal && val < qVal)
+                root = root.right;
+            else return root;
         }
-        
-        return LowestCommonAncestor(root.left, p, q);
+        return null;
     }
 }
