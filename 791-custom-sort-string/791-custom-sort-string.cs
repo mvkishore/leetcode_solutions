@@ -1,25 +1,27 @@
 public class Solution {
     public string CustomSortString(string order, string s) {
-        int[] counter = new int[26];
+        int[] sCounter = new int[26];
+        
         foreach(var c in s)
-            counter[c - 'a']++;
+            sCounter[c - 'a']++;
         
-        StringBuilder sb = new StringBuilder();
-        
+        StringBuilder sPerm = new StringBuilder();
         foreach(var c in order){
-            while(counter[c-'a'] > 0){
-                sb.Append(c);
-                counter[c - 'a']--;
+            while(sCounter[c - 'a'] > 0)
+            {
+                sPerm.Append(c);
+                sCounter[c - 'a']--;
             }
         }
         
         for(int i=0; i<26; i++){
-            while(counter[i] > 0){
-                sb.Append((char)(i+'a'));
-                counter[i]--;
+            while(sCounter[i] > 0)
+            {
+                sPerm.Append((char)(i + 'a'));
+                sCounter[i]--;
             }
         }
         
-        return sb.ToString();
+        return sPerm.ToString();
     }
 }
