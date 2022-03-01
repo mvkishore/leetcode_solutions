@@ -1,16 +1,14 @@
 public class Solution {
     public int FirstMissingPositive(int[] nums) {
-        int small = 1;
-        HashSet<int> seen = new HashSet<int>();
-        for(int i=0; i<nums.Length; i++){
-            if(nums[i] == small)
-            {
-                small++;
-                while(seen.Contains(small))
-                    small++;
+        int missing = 1;
+        HashSet<int> seenNums = new HashSet<int>();
+        foreach(var num in nums){
+            seenNums.Add(num);
+            if(num == missing){
+                while(seenNums.Contains(missing))
+                    missing++;
             }
-            seen.Add(nums[i]);
         }
-        return small;
+        return missing;
     }
 }
