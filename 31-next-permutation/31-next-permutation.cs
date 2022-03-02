@@ -1,27 +1,29 @@
 public class Solution {
     public void NextPermutation(int[] nums) {
-        int expl = -1;
+        int explore = -1;
         int n = nums.Length;
-        for(int i=n-2; i >= 0; i--){
-            if(nums[i] < nums[i + 1]){
-                expl = i;
+        for(int i= n - 2; i >= 0; i--){
+            if(nums[i] < nums[i+1])
+            {
+                explore = i;
                 break;
             }
         }
         
-        if(expl >= 0){
-            int next = expl + 1;
-            for(int i=next; i < n; i++){
-                if(nums[i] > nums[expl] && nums[next] >= nums[i])
+        if(explore >=0){
+            int next = explore + 1;
+            for(int i= next; i < n; i++){
+                if(nums[i] > nums[explore] && nums[next] >= nums[i])
+                {
                     next = i;
+                }
             }
-            
-            Swap(nums, expl, next);
+            Swap(nums, explore, next);
         }
-        Reverse(nums, expl + 1);
+        Reverse(nums, explore + 1);
     }
     
-    private void Swap(int[] nums, int i, int j){
+    public void Swap(int[] nums, int i, int j){
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
@@ -29,7 +31,9 @@ public class Solution {
     
     private void Reverse(int[] nums, int start){
         int end = nums.Length - 1;
-        while(start < end)
+        while(start < end){
             Swap(nums, start++, end--);
+        }
     }
+    
 }
