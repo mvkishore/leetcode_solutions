@@ -6,15 +6,13 @@ public class Solution {
             x = 1 / x;
         }
         
-        return Pow(x, N);
-    }
-    
-    private double Pow(double x, long N){
-        if(N == 0)
-            return 1.0;
-        var half = Pow(x, N / 2);
-        if(N % 2 == 1)
-            return half * half * x;
-        return half * half;
+        var half = x;
+        double res = 1;
+        for(long i=N; i > 0; i/=2){
+            if((i % 2) == 1)
+                res = res * half;
+            half = half * half;
+        }
+        return res;
     }
 }
