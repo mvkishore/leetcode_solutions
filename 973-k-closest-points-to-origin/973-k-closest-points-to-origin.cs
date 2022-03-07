@@ -1,32 +1,31 @@
 public class Solution {
     public int[][] KClosest(int[][] points, int k) {
-        PriorityQueue<int[], double> queue = new PriorityQueue<int[], double>
-            (Comparer<double>.Create((a, b) => b.CompareTo(a)));
-        int n = points.Length;
+        PriorityQueue<int, int> queue = new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b - a));
         
-        for(int i=0; i<n; i++){
+        for(int i=0; i< points.Length; i++){
             var point = points[i];
-            double distance = GetDistance(point);
+            int d = GetDistance(point);
             
-            if(queue.Count == k)
-            {
-                if(GetDistance(queue.Peek()) > distance)
-                    queue.Dequeue();
-                else continue;
+            if(queue.Count == k){
+                if(GetDistance(points[queue.Peek()]) < d){
+                    continue;
+                }
+                queue.Dequeue();
             }
             
-            queue.Enqueue(point, distance);
+            queue.Enqueue(i, d);
         }
-        int l = queue.Count;
-        int[][] res = new int[l][];
         
-        for(int i=0; i < l; i++)
-            res[i] = queue.Dequeue();
-        return res;
+        int[][] results = new int[queue.Count][];
+        int c = 0;
+        while(queue.Count > 0){
+            results[c++] = points[queue.Dequeue()];
+        }
+        
+        return results;
     }
     
-    private double GetDistance(int[] point){
-        int x = point[0], y = point[1];
-        return Math.Sqrt(x*x + y*y);
+    private int GetDistance(int[] point){
+        return point[0] * point[0] + point[1] * point[1];
     }
 }
