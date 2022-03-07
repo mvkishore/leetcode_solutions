@@ -1,43 +1,50 @@
 public class Solution {
     public IList<string> FindAllConcatenatedWordsInADict(string[] words) {
         HashSet<string> wordSet = new HashSet<string>();
-        foreach(var word in words)
-            wordSet.Add(word);
+        foreach(var w in words)
+            wordSet.Add(w);
         
-        IList<string> res = new List<string>();
-        foreach(var word in words){
-            int count = GetWordsCount(word, wordSet);
-            if(count > 1)
-                res.Add(word);
+        var res = new List<string>();
+        
+        foreach(var w in words){
+            wordSet.Remove(w);
+            if(IsConcatenatedWord(w, wordSet))
+                res.Add(w);
+            wordSet.Add(w);
         }
+        
         return res;
     }
     
-    private int GetWordsCount(string word, HashSet<string> wordSet){
-        int?[] memo = new int?[word.Length];
-        return GetWordsCount(word, 0, memo, wordSet).Value;
+    private bool IsConcatenatedWord(string word, HashSet<string> wordSet)
+    {
+        int n = word.Length;
+        if(n == 0)
+            return false;
+        bool?[] memo = new bool?[n];
+        
+        return IsConcatenated(word, 0, wordSet, memo).Value;
     }
     
-    private int? GetWordsCount(string word, int start, int?[] memo, HashSet<string> wordSet)
+    private bool? IsConcatenated(string word, int indx, HashSet<string> wordSet, bool?[] memo)
     {
-        if(start >= word.Length)
-            return 0;
+        if(indx == word.Length)
+            return true;
         
-        if(memo[start] != null)
-            return memo[start];
+        if(memo[indx] != null)
+            return memo[indx];
         
         StringBuilder sb = new StringBuilder();
         
-        for(int i=start; i< word.Length; i++){
-            sb.Append(word[i]);
-            var str = sb.ToString();
-            if(wordSet.Contains(str)){
-                var res = GetWordsCount(word, i+1, memo, wordSet).Value;
-                if(res > -1){
-                    return memo[start] = 1 + res;
-                }
+        for(int i = indx; i<word.Length; i++){
+            var c = word[i];
+            sb.Append(c);
+            if(wordSet.Contains(sb.ToString()) && IsConcatenated(word, i + 1, wordSet, memo) == true)
+            {
+                return memo[indx] = true;
             }
         }
-        return memo[start] = -1;
+        
+        return memo[indx] = false;
     }
 }
