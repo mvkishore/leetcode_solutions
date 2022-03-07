@@ -1,30 +1,31 @@
 public class Solution {
     public int MinMeetingRooms(int[][] intervals) {
         int n = intervals.Length;
-        int[] starts = new int[n];
-        int[] ends = new int[n];
+        (int val, bool start)[] times = new (int val, bool start)[2 * n];
         
-        for(int i=0; i<n; i++){
-            starts[i] = intervals[i][0];
-            ends[i] = intervals[i][1];
+        int i=0;
+        foreach(var interval in intervals){
+            times[i++] = (interval[0], true);
+            times[i++] = (interval[1], false);
         }
         
-        Array.Sort(starts);
-        Array.Sort(ends);
+        Array.Sort(times, (a, b) => a.val == b.val ? 
+                                    (a.start == b.start ? 
+                                        0 : (a.start) ? 
+                                            1 : -1) 
+                                    : a.val - b.val);
         
-        int sI = 0, eI = 0, rooms = 0;
-        int minRooms = 0;
-        while(sI < n){
-            if(starts[sI] < ends[eI]){
+        int rooms = 0, minRooms = 0;
+        for(i = 0; i<2*n; i++){
+            if(times[i].start){
                 rooms++;
-                minRooms = Math.Max(minRooms, rooms);
-                sI++;
-            }else{
-                eI++;
-                rooms--;
+                if(rooms == 2)
+                    Console.WriteLine(times[i].val);
+            } else {
+                rooms--;  
             }
+            minRooms = Math.Max(minRooms, rooms);
         }
-        
         return minRooms;
     }
 }
