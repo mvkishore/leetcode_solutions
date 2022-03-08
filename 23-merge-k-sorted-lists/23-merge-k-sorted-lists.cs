@@ -11,25 +11,25 @@
  */
 public class Solution {
     public ListNode MergeKLists(ListNode[] lists) {
-        ListNode dummy = new ListNode(0);
-        PriorityQueue<ListNode, int> heap = new PriorityQueue<ListNode, int>();
-        if(lists == null)
-            return dummy.next;
+        PriorityQueue<ListNode, int> queue = new PriorityQueue<ListNode, int>();
         
-        foreach(var head in lists){
-            if(head != null)
-                heap.Enqueue(head, head.val);
+        var dummy = new ListNode(0);
+        
+        foreach(var list in lists){
+            if(list != null)
+                queue.Enqueue(list, list.val);
         }
+        
         var trav = dummy;
-        while(heap.Count > 0){
-            var min = heap.Dequeue();
-            trav.next = min;
-            
-            if(min.next != null)
-                heap.Enqueue(min.next, min.next.val);
-            
+        
+        while(queue.Count > 0){
+            var cur = queue.Dequeue();
+            trav.next = cur;
+            if(cur.next != null)
+                queue.Enqueue(cur.next, cur.next.val);
             trav = trav.next;
         }
+        trav.next = null;
         
         return dummy.next;
     }
