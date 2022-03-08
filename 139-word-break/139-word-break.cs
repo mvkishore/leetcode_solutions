@@ -1,28 +1,29 @@
 public class Solution {
     public bool WordBreak(string s, IList<string> wordDict) {
-        HashSet<string> words = new HashSet<string>();
-        foreach(var word in wordDict)
-            words.Add(word);
-        bool?[] memo = new bool?[s.Length];
+        HashSet<string> wordSet = new HashSet<string>();
         
-        return WordBreak(s, 0, words, memo).Value;
+        foreach(var word in wordDict)
+            wordSet.Add(word);
+        
+        bool?[] memo = new bool?[s.Length];
+        return CanBreak(s, 0, wordSet, memo).Value;
     }
     
-    public bool? WordBreak(string s,int cur,HashSet<string> words, bool?[] memo)
+    private bool? CanBreak(string s, int start, HashSet<string> wordDict, bool?[] memo)
     {
-        if(cur == s.Length)
+        if(start == s.Length)
             return true;
-        if(memo[cur] != null)
-            return memo[cur].Value;
+        
+        if(memo[start] != null)
+            return memo[start];
         
         StringBuilder sb = new StringBuilder();
         
-        for(int i=cur; i< s.Length; i++){
+        for(int i=start; i < s.Length; i++){
             sb.Append(s[i]);
-            if(words.Contains(sb.ToString()) && WordBreak(s, i + 1, words, memo).Value){
-                return memo[cur] = true;
-            }
+            if(wordDict.Contains(sb.ToString()) && CanBreak(s, i+1, wordDict, memo) == true)
+                return memo[start] = true;
         }
-        return memo[cur] = false;
+        return memo[start] = false;
     }
 }
