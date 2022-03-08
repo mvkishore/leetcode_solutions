@@ -1,43 +1,35 @@
 public class Solution {
     public int[] FindOrder(int numCourses, int[][] prerequisites) {
-        Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
-        int[] preReqs = new int[numCourses];
+        Dictionary<int, List<int>> requisites = new Dictionary<int, List<int>>();
+        int[] indegree = new int[numCourses];
+        for(int i=0; i<numCourses; i++)
+            requisites.Add(i, new List<int>());
         
-        for(int i=0; i<prerequisites.Length; i++){
-            var courseA = prerequisites[i][0];
-            var courseB = prerequisites[i][1];
+        foreach(var preReq in prerequisites){
+            var a = preReq[0];
+            var b = preReq[1];
             
-            if(!graph.ContainsKey(courseB))
-                graph.Add(courseB, new List<int>());
-            
-            graph[courseB].Add(courseA);
-            preReqs[courseA]++;
+            requisites[b].Add(a);
+            indegree[a]++;
         }
-        
-        int[] results = new int[numCourses];
-        Queue<int> leaves = new Queue<int>();
-        int c=0;
+        int[] res = new int[numCourses];
+        Queue<int> queue = new Queue<int>();
         for(int i=0; i<numCourses; i++){
-            if(preReqs[i] == 0){
-                leaves.Enqueue(i);
+            if(indegree[i] == 0)
+                queue.Enqueue(i);
+        }
+        int c = 0;
+        while(queue.Count > 0){
+            var course = queue.Dequeue();
+            res[c++] = course;
+            foreach(var next in requisites[course]){
+                indegree[next]--;
+                if(indegree[next] == 0)
+                    queue.Enqueue(next);
             }
         }
         
-        while(leaves.Count > 0){
-            var curCourse = leaves.Dequeue();
-            results[c++] = curCourse;
-            
-            if(!graph.ContainsKey(curCourse)) continue;
-            
-            foreach(var dep in graph[curCourse]){
-                preReqs[dep]--;
-                if(preReqs[dep] == 0)
-                    leaves.Enqueue(dep);
-            }
-        }
-        if(c == numCourses)
-            return results;
-        
+        if(c == numCourses) return res;
         return new int[0];
     }
 }
