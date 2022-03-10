@@ -1,37 +1,34 @@
 public class Solution {
     public string DecodeString(string s) {
         Stack<int> seenKs = new Stack<int>();
-        Stack<StringBuilder> seenStrings = new Stack<StringBuilder>();
-        
-        StringBuilder curString = new StringBuilder();
+        Stack<StringBuilder> seenStrs = new Stack<StringBuilder>();
         int curNum = 0;
+        StringBuilder curStr = new StringBuilder();
         
         foreach(var c in s){
             if(char.IsDigit(c)){
                 curNum = curNum * 10 + c - '0';
-            }else if(c == '['){
-                
+            } else if(c == '[')
+            {
                 seenKs.Push(curNum);
+                seenStrs.Push(curStr);
+                curStr = new StringBuilder();
                 curNum = 0;
-                seenStrings.Push(curString);
-                curString = new StringBuilder();
-                
-            }else if(c == ']'){
-                
+            } else if(c == ']') {
                 var k = seenKs.Pop();
-                var str = seenStrings.Pop();
+                var str = seenStrs.Pop();
+                
                 while(k > 0){
-                    str.Append(curString);
+                    str.Append(curStr);
                     k--;
                 }
-                curString = str;
                 
+                curStr = str;
             } else {
-                curString.Append(c);
+                curStr.Append(c);
             }
         }
         
-        return curString.ToString();
+        return curStr.ToString();
     }
 }
-     
