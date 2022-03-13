@@ -1,6 +1,6 @@
 public class Solution {
     public int WordsTyping(string[] sentence, int rows, int cols) {
-        int n = sentence.Length, col = 0, row = 0, count = 0, indx = 0;
+        int n = sentence.Length, row = 0, count = 0, indx = 0;
         int len = 0;
         
         while(row < rows){
