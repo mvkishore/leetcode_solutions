@@ -1,20 +1,19 @@
 public class Solution {
     public bool IsValid(string s) {
-        Stack<char> stack = new Stack<char>();
-        Dictionary<char, char> parenthMap = new Dictionary<char, char>(){
-            {')', '(' },
-            {']', '[' },
-            {'}', '{' },
+        Dictionary<char, char> brackets = new Dictionary<char, char>(){
+            {'{', '}'},
+            {'[', ']'},
+            {'(', ')'}
         };
         
+        Stack<char> seen = new Stack<char>();
         foreach(var c in s){
-            if(parenthMap.ContainsKey(c)){
-                if(stack.Count == 0 || stack.Pop() != parenthMap[c])
-                    return false;
-            }else {
-                stack.Push(c);
-            }
+            if(brackets.ContainsKey(c)){
+                seen.Push(brackets[c]);
+            }else if(seen.Count == 0 || seen.Pop() != c)
+                return false;
         }
-        return stack.Count == 0;
+        
+        return seen.Count == 0;
     }
 }
