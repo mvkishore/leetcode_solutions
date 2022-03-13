@@ -15,46 +15,44 @@ public class Node {
 
 public class Solution {
     public Node CopyRandomList(Node head) {
+        Node trav = head;
         if(head == null)
             return head;
         
-        Node cur = head;
-        while(cur != null){
-            var next = cur.next;
-            var newNode = new Node(cur.val);
+        while(trav != null){
+            var next = trav.next;
+            var clone = new Node(trav.val);
             
-            cur.next = newNode;
-            newNode.next = next;
+            trav.next = clone;
+            clone.next = next;
+            trav = next;
+        }
+        trav = head;
+        Node cloneHead = head.next;
+        
+        while(trav != null){
+            var clone = trav.next;
+            var next = clone.next;
             
-            cur = next;
+            if(trav.random != null)
+                clone.random = trav.random.next;
+            trav = next;
         }
         
-        cur = head;
-        Node copyHead = head.next;
-        
-        while(cur != null){
-            var newCur = cur.next;
-            var next = newCur.next;
+        trav = head;
+        var cTrav = cloneHead;
+        // 1-> 1` -> 2 -> 2` -> null
+        while(trav != null){
+            var clone = trav.next;
+            var next = clone.next;
             
-            var random = cur.random;
-            if(random != null)
-                newCur.random = random.next;
-            
-            cur = next;
-        }
-        
-        cur = head;
-        while(cur != null){
-            var newCur = cur.next;
-            var next = newCur.next;
-            
+            trav.next = clone.next;
             if(next != null)
-                newCur.next = next.next;
+                clone.next = next.next;
             
-            cur.next = next;
-            cur = next;
+            trav = next;
         }
         
-        return copyHead;
+        return cloneHead;
     }
 }
